@@ -1,7 +1,20 @@
+using Microsoft.EntityFrameworkCore;
+using My101Romance.DAL;
+using My101Romance.DAL.Interfaces;
+using My101Romance.DAL.Repositories;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddDbContext<AppDbContext>(options =>
+{
+    options.UseSqlServer(builder.Configuration["ConnectionStrings:DefaultConnection"]);
+    
+});
+
+builder.Services.AddScoped<ICardRepository, CardRepository>();
 
 var app = builder.Build();
 
