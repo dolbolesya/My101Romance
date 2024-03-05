@@ -15,7 +15,7 @@ public class CardRepository : ICardRepository
     
     public async Task<bool> Create(Card? entity)
     {
-        await _db.Card.AddAsync(entity);
+        _db.Card!.Add(entity);
         await _db.SaveChangesAsync();
 
         return true;
@@ -23,24 +23,24 @@ public class CardRepository : ICardRepository
 
     public async Task<Card?> Get(int id)
     {
-        return await _db.Card.FirstOrDefaultAsync(x => x.Id == id);
+        return await _db.Card!.FirstOrDefaultAsync(x => x!.Id == id);
     }
 
-    public Task<List<Card?>> Select()
+    public async Task<List<Card>> Select()
     {
-        return _db.Card.ToListAsync();
+        return await _db.Card.ToListAsync();
     }
 
     public async Task<bool> Delete(Card? entity)
-    {
-        _db.Card.Remove(entity);
-        _db.SaveChangesAsync();
+    { 
+        _db.Card!.Remove(entity);
+        await _db.SaveChangesAsync();
 
         return true;
     }
 
-    public async Task<Card> GetByTitle(string title)
+    public async Task<Card?> GetByTitle(string title)
     {
-        return await _db.Card.FirstOrDefaultAsync(x => x.Title == title);
+        return await _db.Card.FirstOrDefaultAsync(x => x!.Title == title);
     }
 }

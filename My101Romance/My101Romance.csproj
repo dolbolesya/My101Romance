@@ -21,6 +21,7 @@
     <ItemGroup>
         <ProjectReference Include="..\My101Romance.DAL\My101Romance.DAL.csproj" />
         <ProjectReference Include="..\My101Romance.Migrations\My101Romance.Migrations.csproj" />
+        <ProjectReference Include="..\My101Romance.Services\My101Romance.Services.csproj" />
     </ItemGroup>
     
 

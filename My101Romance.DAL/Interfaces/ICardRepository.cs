@@ -5,5 +5,5 @@ namespace My101Romance.DAL.Interfaces;
 
 public interface ICardRepository : IBaseRepository<Card>
 {
-    Task<Card> GetByTitle(string title);
+    Task<Card?> GetByTitle(string title);
 }

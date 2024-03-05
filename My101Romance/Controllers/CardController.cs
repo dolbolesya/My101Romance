@@ -1,33 +1,29 @@
+using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using My101Romance.DAL.Interfaces;
 using My101Romance.Domain.Entity;
+using My101Romance.Models;
+using My101Romance.Services.Interfaces;
+using My101Romance.Domain.Enum;
+using My101Romance.Domain.Response;
+
 
 namespace My101Romance.Controllers;
 
 public class CardController : Controller
 {
-    private readonly ICardRepository _cardRepository;
-    
-    public CardController(ICardRepository cardRepository)
+    private readonly ICardService _cardService;
+    public CardController(ICardService cardService)
     {
-        _cardRepository = cardRepository;
+        _cardService = cardService;
     }
-
+    
+    
     [HttpGet]
     public async Task<IActionResult> GetCards()
     {
-        var card = new Card()
-        {
-            Title = "test title",
-            Description = "test desc",
-            Rating = 0,
-            IsForAll = true
-        };
-        
-        await _cardRepository.Create(card);
-        
-        var response = await _cardRepository.Select();
-        return View(response);
+        var response = await _cardService.GetCards();
+        return View(response.Data);
     }
 
 }

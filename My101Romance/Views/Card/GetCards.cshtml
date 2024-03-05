@@ -1,14 +1,18 @@
-@model List<My101Romance.Domain.Entity.Card>
-
+@model IEnumerable<My101Romance.Domain.Entity.Card>
 @{
     ViewBag.Title = "my title";
     Layout = "_Layout";
 }
 
-@foreach (var card in Model)
-{
-    <p>id: @card.Id</p>
-    <p>Title: @card.Title</p>
-    <p>Rating: @card.Rating</p>
-    <hr/>
+    @foreach (var card in Model)
+    {
+        
+        <p>@card.Id</p>
+        @if (true)
+        {
+            
+            <p>@card.Description</p>
+        }
+        <hr/>
+    }
 }

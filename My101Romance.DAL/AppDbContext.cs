@@ -12,5 +12,5 @@ public sealed class AppDbContext : DbContext
         Database.EnsureCreated();
     }
 
-    public DbSet<Card?>? Card { get; set; }
+    public DbSet<Card?> Card { get; set; }
 }
