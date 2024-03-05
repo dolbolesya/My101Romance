@@ -2,6 +2,7 @@ using My101Romance.DAL.Interfaces;
 using My101Romance.Domain.Entity;
 using My101Romance.Domain.Enum;
 using My101Romance.Domain.Response;
+using My101Romance.Domain.ViewModels.Card;
 using My101Romance.Services.Interfaces;
 
 namespace My101Romance.Services.Implementations;
@@ -14,6 +15,31 @@ public class CardService : ICardService
     {
         _CardRepository = cardRepository;
     }
+
+    public async Task<IBaseResponse<Card>> GetCard(int id)
+    {
+        var baseResponse = new BaseResponse<Card>();
+        try
+        {
+            var card = await _CardRepository.Get(id);
+            if (card == null)
+            {
+                baseResponse.ErrDescription = $"Item not dound by {id}";
+                baseResponse.StatusCode = StatusCode.CardNotFound;
+                return baseResponse;
+            }
+            baseResponse.Data = card;
+            baseResponse.StatusCode = StatusCode.Ok;
+            return baseResponse;
+        }
+        catch (Exception e)
+        {
+            return new BaseResponse<Card>()
+            {
+                ErrDescription = $"[GetCard]: {e.Message}"
+            };
+        }
+    }
     
     public async Task<IBaseResponse<IEnumerable<Card>>> GetCards()
     {
@@ -24,18 +50,101 @@ public class CardService : ICardService
             if (cards.Count == 0)
             {
                 baseResponse.ErrDescription = "Found 0 elements";
-                baseResponse.StatusCode = StatusCode.NotFound;
+                baseResponse.StatusCode = StatusCode.CardNotFound;
             }
 
             baseResponse.Data = cards;
             baseResponse.StatusCode = StatusCode.Ok;
             return baseResponse;
         }
-        catch( Exception e)
+        catch(Exception e)
         {
             return new BaseResponse<IEnumerable<Card>>()
             {
                 ErrDescription = $"[GetCards]: {e.Message}"
+            };
+        }
+    }
+    
+    public async Task<IBaseResponse<Card>> GetCardByTitle(string title)
+    {
+        var baseResponse = new BaseResponse<Card>();
+        try
+        {
+            var card = await _CardRepository.GetByTitle(title);
+            if (card == null)
+            {
+                baseResponse.ErrDescription = $"Item not found by `{title}`";
+                baseResponse.StatusCode = StatusCode.CardNotFound;
+                return baseResponse;
+            }
+            baseResponse.Data = card;
+            baseResponse.StatusCode = StatusCode.Ok;
+            return baseResponse;
+        }
+        catch (Exception e)
+        {
+            return new BaseResponse<Card>()
+            {
+                ErrDescription = $"[GetCardByTitle]: {e.Message}"
+            };
+        }
+    }
+
+    public async Task<IBaseResponse<CardViewModel>> CreateCard(CardViewModel cardViewModel)
+    {
+        var baseResponse = new BaseResponse<CardViewModel>();
+        try
+        {
+            var card = new Card()
+            {
+                Title = "text",
+                Description = "view desc test",
+                IsForAll = true,
+                Rating = 0
+
+            };
+
+            await _CardRepository.Create(card);
+        }
+        catch (Exception e)
+        {
+            return new BaseResponse<CardViewModel>()
+            {
+                ErrDescription = $"[CreateCard]: {e.Message}"
+            };
+        }
+
+        return baseResponse;
+
+    }
+    
+    public async Task<IBaseResponse<bool>> DeleteCard(int id)
+    {
+        var baseResponse = new BaseResponse<bool>()
+        {
+            Data = true
+        };
+        try
+        {
+            var card = await _CardRepository.Get(id);
+            if (card == null)
+            {
+                baseResponse.ErrDescription = $"Item not found by `{id}`";
+                baseResponse.StatusCode = StatusCode.CardNotFound;
+                baseResponse.Data = false;
+                return baseResponse;
+            }
+
+            await _CardRepository.Delete(card);
+
+            return baseResponse;
+        }
+        catch (Exception e)
+        {
+            return new BaseResponse<bool>()
+            {
+                ErrDescription = $"[DeleteCard]: {e.Message}"
             };
         }
     }

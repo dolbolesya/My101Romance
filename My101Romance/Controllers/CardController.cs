@@ -23,7 +23,16 @@ public class CardController : Controller
     public async Task<IActionResult> GetCards()
     {
         var response = await _cardService.GetCards();
-        return View(response.Data);
+        if (response.StatusCode == Domain.Enum.StatusCode.Ok)
+        {
+            return View(response.Data);
+        }
+
+        return RedirectToAction("");
     }
 
+    public IActionResult Error()
+    {
+        throw new NotImplementedException();
+    }
 }
