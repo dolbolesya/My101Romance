@@ -15,7 +15,7 @@ public class CardService : ICardService
     {
         _CardRepository = cardRepository;
     }
-
+    
     public async Task<IBaseResponse<Card>> GetCard(int id)
     {
         var baseResponse = new BaseResponse<Card>();
@@ -36,7 +36,8 @@ public class CardService : ICardService
         {
             return new BaseResponse<Card>()
             {
-                ErrDescription = $"[GetCard]: {e.Message}"
+                ErrDescription = $"[GetCard]: {e.Message}",
+                StatusCode = StatusCode.InternalServerError
             };
         }
     }
@@ -61,11 +62,15 @@ public class CardService : ICardService
         {
             return new BaseResponse<IEnumerable<Card>>()
             {
-                ErrDescription = $"[GetCards]: {e.Message}"
+                ErrDescription = $"[GetCards]: {e.Message}",
+                StatusCode = StatusCode.InternalServerError
             };
         }
     }
-    
+
+
+
+
     public async Task<IBaseResponse<Card>> GetCardByTitle(string title)
     {
         var baseResponse = new BaseResponse<Card>();
@@ -86,7 +91,8 @@ public class CardService : ICardService
         {
             return new BaseResponse<Card>()
             {
-                ErrDescription = $"[GetCardByTitle]: {e.Message}"
+                ErrDescription = $"[GetCardByTitle]: {e.Message}",
+                StatusCode = StatusCode.InternalServerError
             };
         }
     }
@@ -111,7 +117,8 @@ public class CardService : ICardService
         {
             return new BaseResponse<CardViewModel>()
             {
-                ErrDescription = $"[CreateCard]: {e.Message}"
+                ErrDescription = $"[CreateCard]: {e.Message}",
+                StatusCode = StatusCode.InternalServerError
             };
         }
 
@@ -144,7 +151,46 @@ public class CardService : ICardService
         {
             return new BaseResponse<bool>()
             {
-                ErrDescription = $"[DeleteCard]: {e.Message}"
+                ErrDescription = $"[DeleteCard]: {e.Message}",
+                StatusCode = StatusCode.InternalServerError
+            };
+        }
+    }
+
+    public Task<IBaseResponse<Card>> GetByTitle(string title)
+    {
+        throw new NotImplementedException();
+    }
+
+    public async Task<IBaseResponse<Card>> Edit(int id, CardViewModel model)
+    {
+        var baseResponse = new BaseResponse<Card>();
+        try
+        {
+            var card = await _CardRepository.Get(id);
+            if (card == null)
+            {
+                baseResponse.StatusCode = StatusCode.CardNotFound;
+                baseResponse.ErrDescription = "Card not found";
+
+                return baseResponse;
+            }
+
+            card.Title = model.Title;
+            card.Description = model.Description;
+            card.Rating = model.Rating;
+            card.IsForAll = model.IsForAll;
+
+            await _CardRepository.Update(card);
+
+            return baseResponse;
+        }
+        catch (Exception e)
+        {
+            return new BaseResponse<Card>()
+            {
+                ErrDescription = $"[Edit]: {e.Message}",
+                StatusCode = StatusCode.InternalServerError
             };
         }
     }

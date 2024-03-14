@@ -39,6 +39,14 @@ public class CardRepository : ICardRepository
         return true;
     }
 
+    public async Task<Card> Update(Card entity)
+    {
+        _db.Card.Update(entity);
+        await _db.SaveChangesAsync();
+
+        return entity;
+    }
+
     public async Task<Card?> GetByTitle(string title)
     {
         return await _db.Card.FirstOrDefaultAsync(x => x!.Title == title);

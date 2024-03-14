@@ -1,11 +1,8 @@
-using System.Diagnostics;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using My101Romance.DAL.Interfaces;
-using My101Romance.Domain.Entity;
-using My101Romance.Models;
 using My101Romance.Services.Interfaces;
-using My101Romance.Domain.Enum;
-using My101Romance.Domain.Response;
+using My101Romance.Domain.ViewModels.Card;
+using My101Romance.Controllers;
 
 
 namespace My101Romance.Controllers;
@@ -28,11 +25,70 @@ public class CardController : Controller
             return View(response.Data);
         }
 
-        return RedirectToAction("");
+        return RedirectToAction("Error");
     }
 
-    public IActionResult Error()
+    [HttpGet]
+    public async Task<IActionResult> GetCard(int id)
     {
-        throw new NotImplementedException();
+        var response = await _cardService.GetCard(id);
+        if (response.StatusCode == Domain.Enum.StatusCode.Ok)
+        {
+            return View(response.Data);
+        }
+
+        return RedirectToAction("Error");
     }
+
+    [HttpDelete]
+    [Authorize(Roles = "Admin")]
+    public async Task<IActionResult> Delete(int id)
+    {
+        var response = await _cardService.DeleteCard(id);
+        if (response.StatusCode == Domain.Enum.StatusCode.Ok)
+        {
+            return RedirectToAction("GetCards");
+        }
+
+        return RedirectToAction("Error");
+    }
+
+    [HttpGet]
+    [Authorize(Roles = "Admin")]
+    public async Task<IActionResult> Save(int id)
+    {
+        if (id == 0)
+        {
+            return View();
+        }
+
+        var response = await _cardService.GetCard(id);
+        if (response.StatusCode == Domain.Enum.StatusCode.Ok)
+        {
+            return View(response.Data);
+        }
+
+        return RedirectToAction("Error");
+    }
+
+    [HttpPost]
+    [Authorize(Roles = "Admin")]
+    public async Task<IActionResult> Save(CardViewModel model)
+    {
+        if (ModelState.IsValid)
+        {
+            if (model.Id == 0)
+            {
+               await _cardService.CreateCard(model);
+            }
+            else
+            {
+                await _cardService.Edit(model.Id, model);
+            }
+        }
+
+        return RedirectToAction("GetCards");
+    }
+
+
 }

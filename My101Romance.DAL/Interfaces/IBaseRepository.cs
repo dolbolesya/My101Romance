@@ -11,4 +11,6 @@ public interface IBaseRepository<T>
     Task<List<Card?>> Select();
 
     Task<bool> Delete(T entity);
+
+    Task<T> Update(T entity);
 }
