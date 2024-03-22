@@ -7,15 +7,11 @@ using My101Romance.Controllers;
 
 namespace My101Romance.Controllers;
 
-public class CardController : Controller
+public class CardController(ICardService cardService) : Controller
 {
-    private readonly ICardService _cardService;
-    public CardController(ICardService cardService)
-    {
-        _cardService = cardService;
-    }
-    
-    
+    private readonly ICardService _cardService = cardService;
+
+
     [HttpGet]
     public async Task<IActionResult> GetCards()
     {
@@ -25,7 +21,7 @@ public class CardController : Controller
             return View(response.Data);
         }
 
-        return RedirectToAction("Error");
+        return RedirectToAction("Error", "Home");
     }
 
     [HttpGet]
@@ -37,7 +33,7 @@ public class CardController : Controller
             return View(response.Data);
         }
 
-        return RedirectToAction("Error");
+        return RedirectToAction("Error", "Home");
     }
 
     [HttpDelete]
@@ -50,7 +46,7 @@ public class CardController : Controller
             return RedirectToAction("GetCards");
         }
 
-        return RedirectToAction("Error");
+        return RedirectToAction("Error", "Home");
     }
 
     [HttpGet]
@@ -68,7 +64,7 @@ public class CardController : Controller
             return View(response.Data);
         }
 
-        return RedirectToAction("Error");
+        return RedirectToAction("Error", "Home");
     }
 
     [HttpPost]
@@ -88,6 +84,21 @@ public class CardController : Controller
         }
 
         return RedirectToAction("GetCards");
+    }
+
+    public async Task<IActionResult> ShowRandomCards()
+    {
+        var response = await _cardService.GetRandomCards();
+        if (response.StatusCode == Domain.Enum.StatusCode.Ok)
+        {
+            var randomCards = response.Data;
+            return View(randomCards);
+        }
+        else
+        {
+            // Обработка ошибки, например, перенаправление на страницу с ошибкой или другие действия
+            return RedirectToAction("Error", "Home");
+        }
     }
 
 

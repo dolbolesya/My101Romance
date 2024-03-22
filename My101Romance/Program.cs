@@ -2,8 +2,11 @@ using Microsoft.EntityFrameworkCore;
 using My101Romance.DAL;
 using My101Romance.DAL.Interfaces;
 using My101Romance.DAL.Repositories;
+using My101Romance.Services;
 using My101Romance.Services.Implementations;
 using My101Romance.Services.Interfaces;
+
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,8 +19,12 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     
 });
 
+builder.Configuration.Bind("Project", new Config());
+
 builder.Services.AddScoped<ICardRepository, CardRepository>();
 builder.Services.AddScoped<ICardService, CardService>();
+
+
 
 var app = builder.Build();
 
@@ -39,6 +46,13 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
-
+app.MapControllerRoute(
+    name: "randomCard",
+    pattern:"card/random",
+    defaults: new
+    {
+        controller = "Card",
+        action = "ShowRandomCards"
+    });
 app.Run();
 

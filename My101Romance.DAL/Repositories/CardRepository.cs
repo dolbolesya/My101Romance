@@ -47,8 +47,16 @@ public class CardRepository : ICardRepository
         return entity;
     }
 
+    public async Task<IEnumerable<Card>> SelectTwoCards()
+    {
+        var randomCards = await _db.Card.OrderBy(x => Guid.NewGuid()).Take(8).ToListAsync();
+        return randomCards;
+    }
+    
+
     public async Task<Card?> GetByTitle(string title)
     {
         return await _db.Card.FirstOrDefaultAsync(x => x!.Title == title);
     }
+    
 }

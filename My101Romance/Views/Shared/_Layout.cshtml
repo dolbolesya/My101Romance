@@ -12,10 +12,8 @@
         @RenderBody()
     </main>
     
-    <footer class="border-top footer text-muted">
-        @await Html.PartialAsync("Partial/FooterPartial")
+    @await Html.PartialAsync("Partial/FooterPartial")
 
-    </footer>
     @await Html.PartialAsync("Partial/ScriptsPartial")
     
     @await RenderSectionAsync("Scripts", required: false)

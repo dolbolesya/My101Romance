@@ -16,4 +16,6 @@ public interface ICardService
 
     Task<IBaseResponse<Card>> GetByTitle(string title);
     Task<IBaseResponse<Card>> Edit(int id, CardViewModel model);
+
+    Task<IBaseResponse<IEnumerable<Card>>> GetRandomCards();
 }

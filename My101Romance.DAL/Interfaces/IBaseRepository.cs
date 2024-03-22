@@ -13,4 +13,6 @@ public interface IBaseRepository<T>
     Task<bool> Delete(T entity);
 
     Task<T> Update(T entity);
+
+    Task<IEnumerable<Card>> SelectTwoCards();
 }

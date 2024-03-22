@@ -24,7 +24,7 @@ public class CardService : ICardService
             var card = await _CardRepository.Get(id);
             if (card == null)
             {
-                baseResponse.ErrDescription = $"Item not dound by {id}";
+                baseResponse.ErrDescription = $"Item not found by {id}";
                 baseResponse.StatusCode = StatusCode.CardNotFound;
                 return baseResponse;
             }
@@ -67,9 +67,6 @@ public class CardService : ICardService
             };
         }
     }
-
-
-
 
     public async Task<IBaseResponse<Card>> GetCardByTitle(string title)
     {
@@ -194,4 +191,33 @@ public class CardService : ICardService
             };
         }
     }
+
+    public async Task<IBaseResponse<IEnumerable<Card>>> GetRandomCards()
+    {
+        var baseResponse = new BaseResponse<IEnumerable<Card>>();
+        try
+        {
+            Random random = new Random();
+            var randomCards = await _CardRepository.SelectTwoCards();
+
+            if (randomCards.Count() == 0)
+            {
+                baseResponse.ErrDescription = "Found 0 elements";
+                baseResponse.StatusCode = StatusCode.CardNotFound;
+            }
+            else
+            {
+                baseResponse.Data = randomCards;
+                baseResponse.StatusCode = StatusCode.Ok;
+            }
+        }
+        catch (Exception e)
+        {
+            baseResponse.ErrDescription = $"[GetRandomCards]: {e.Message}";
+            baseResponse.StatusCode = StatusCode.InternalServerError;
+        }
+        return baseResponse;
+    }
+
+
 }
