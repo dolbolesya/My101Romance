@@ -15,7 +15,7 @@ public class CardService : ICardService
     {
         _CardRepository = cardRepository;
     }
-    
+
     public async Task<IBaseResponse<Card>> GetCard(int id)
     {
         var baseResponse = new BaseResponse<Card>();
@@ -28,6 +28,7 @@ public class CardService : ICardService
                 baseResponse.StatusCode = StatusCode.CardNotFound;
                 return baseResponse;
             }
+
             baseResponse.Data = card;
             baseResponse.StatusCode = StatusCode.Ok;
             return baseResponse;
@@ -41,7 +42,7 @@ public class CardService : ICardService
             };
         }
     }
-    
+
     public async Task<IBaseResponse<IEnumerable<Card>>> GetCards()
     {
         var baseResponse = new BaseResponse<IEnumerable<Card>>();
@@ -58,7 +59,7 @@ public class CardService : ICardService
             baseResponse.StatusCode = StatusCode.Ok;
             return baseResponse;
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             return new BaseResponse<IEnumerable<Card>>()
             {
@@ -80,6 +81,7 @@ public class CardService : ICardService
                 baseResponse.StatusCode = StatusCode.CardNotFound;
                 return baseResponse;
             }
+
             baseResponse.Data = card;
             baseResponse.StatusCode = StatusCode.Ok;
             return baseResponse;
@@ -122,7 +124,7 @@ public class CardService : ICardService
         return baseResponse;
 
     }
-    
+
     public async Task<IBaseResponse<bool>> DeleteCard(int id)
     {
         var baseResponse = new BaseResponse<bool>()
@@ -216,8 +218,60 @@ public class CardService : ICardService
             baseResponse.ErrDescription = $"[GetRandomCards]: {e.Message}";
             baseResponse.StatusCode = StatusCode.InternalServerError;
         }
+
         return baseResponse;
     }
 
+    public async Task<IBaseResponse<IEnumerable<Card>>> Top()
+    {
+        var baseResponse = new BaseResponse<IEnumerable<Card>>();
+        try
+        {
+            var cards = await _CardRepository.GetTop();
+            if (cards == null || !cards.Any())
+            {
+                baseResponse.ErrDescription = "Found 0 elements";
+                baseResponse.StatusCode = StatusCode.CardNotFound;
+            }
+            else
+            {
+                baseResponse.Data = cards;
+                baseResponse.StatusCode = StatusCode.Ok;
+            }
+        }
+        catch(Exception e)
+        {
+            baseResponse.ErrDescription = $"[Top]: {e.Message}";
+            baseResponse.StatusCode = StatusCode.InternalServerError;
+        }
 
+        return baseResponse;
+    }
+
+    
+    public async Task<IBaseResponse<IEnumerable<Card>>> Top18Plus()
+    {
+        var baseResponse = new BaseResponse<IEnumerable<Card>>();
+        try
+        {
+            var cards = await _CardRepository.GetTop18Plus();
+            if (cards == null || !cards.Any())
+            {
+                baseResponse.ErrDescription = "Found 0 elements";
+                baseResponse.StatusCode = StatusCode.CardNotFound;
+            }
+            else
+            {
+                baseResponse.Data = cards;
+                baseResponse.StatusCode = StatusCode.Ok;
+            }
+        }
+        catch(Exception e)
+        {
+            baseResponse.ErrDescription = $"[Top18plus]: {e.Message}";
+            baseResponse.StatusCode = StatusCode.InternalServerError;
+        }
+
+        return baseResponse;
+    }
 }

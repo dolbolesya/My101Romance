@@ -18,4 +18,9 @@ public interface ICardService
     Task<IBaseResponse<Card>> Edit(int id, CardViewModel model);
 
     Task<IBaseResponse<IEnumerable<Card>>> GetRandomCards();
+
+    Task<IBaseResponse<IEnumerable<Card>>> Top();
+    
+    Task<IBaseResponse<IEnumerable<Card>>> Top18Plus();
+
 }

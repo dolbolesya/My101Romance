@@ -101,5 +101,32 @@ public class CardController(ICardService cardService) : Controller
         }
     }
 
+    public async Task<IActionResult> Top()
+    {
+        var response = await _cardService.Top();
+        if (response.StatusCode == Domain.Enum.StatusCode.Ok)
+        {
+            var cards = response.Data;
+            return View(cards);
+        }
+        else
+        {
+            return RedirectToAction("Error", "Home");
+        }
+    }
+
+    public async Task<IActionResult> Top18Plus()
+    {
+        var response = await _cardService.Top18Plus();
+        if (response.StatusCode == Domain.Enum.StatusCode.Ok)
+        {
+            var cards = response.Data;
+            return View(cards);
+        }
+        else
+        {
+            return RedirectToAction("Error", "Home");
+        }
+    }
 
 }

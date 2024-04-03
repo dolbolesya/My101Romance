@@ -4,7 +4,7 @@ namespace My101Romance.DAL.Interfaces;
 
 public interface IBaseRepository<T>
 {
-   Task<bool> Create(T entity);
+    Task<bool> Create(T entity);
 
     Task<Card?> Get(int id);
 
@@ -15,4 +15,8 @@ public interface IBaseRepository<T>
     Task<T> Update(T entity);
 
     Task<IEnumerable<Card>> SelectTwoCards();
+
+    Task<IEnumerable<Card?>> GetTop();
+
+    Task<IEnumerable<Card>> GetTop18Plus();
 }

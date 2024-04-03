@@ -26,7 +26,7 @@ public class CardRepository : ICardRepository
         return await _db.Card!.FirstOrDefaultAsync(x => x!.Id == id);
     }
 
-    public async Task<List<Card>> Select()
+    public async Task<List<Card?>> Select()
     {
         return await _db.Card.ToListAsync();
     }
@@ -52,7 +52,28 @@ public class CardRepository : ICardRepository
         var randomCards = await _db.Card.OrderBy(x => Guid.NewGuid()).Take(8).ToListAsync();
         return randomCards;
     }
-    
+
+    public async Task<IEnumerable<Card?>> GetTop()
+    {
+        var cards = _db.Card
+            .Where(c => c!.IsForAll == true)
+            .OrderBy(c => c!.Rating)
+            .ToList();
+
+        return cards;
+
+    }
+
+    public async Task<IEnumerable<Card>> GetTop18Plus()
+    {
+        
+        var cards = _db.Card
+            .OrderBy(c => c!.Rating)
+            .ToList();
+
+        return cards;
+    }
+
 
     public async Task<Card?> GetByTitle(string title)
     {

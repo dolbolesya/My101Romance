@@ -1,19 +1,16 @@
 @model IEnumerable<My101Romance.Domain.Entity.Card>
 
-<h1 class="text-center">Random Cards</h1>
-
 <div class="container">
-    <div class="row justify-content-center">
+    <div class="row">
         @foreach (var card in Model)
         {
-            <div class="col-md-6">
+            <div class="col-md-12 my-3">
                 <div>
-                    <p>@card.Id</p>
+                    <p>R: @card.Rating</p>
                     <p>@card.Title</p>
                     <p>@card.Description</p>
                     <hr/>
                 </div>
-   
             </div>
         }
     </div>
