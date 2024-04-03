@@ -6,16 +6,19 @@
     @await Html.PartialAsync("Partial/MetatagsPartial")
     @await Html.PartialAsync("Partial/CssPartial")
 </head>
-<body>
+<body style="height: 100%">
+<div class="wrap" style="min-height:100%; display: flex; flex-direction: column; height: 100vh;">
     @await Html.PartialAsync("Partial/HeaderPartial")
-    <main>
-        @RenderBody()
-    </main>
+        <main style="flex: 1 1 auto;">
+            @RenderBody()
+        </main>
     
     @await Html.PartialAsync("Partial/FooterPartial")
-
-    @await Html.PartialAsync("Partial/ScriptsPartial")
     
-    @await RenderSectionAsync("Scripts", required: false)
+    @await Html.PartialAsync("Partial/ScriptsPartial")
+</div>
+
+
+@await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

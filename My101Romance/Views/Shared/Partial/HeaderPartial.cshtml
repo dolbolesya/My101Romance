@@ -1,8 +1,32 @@
-<div class="container">
-  <header class="d-flex justify-content-center py-3">
-    <ul class="nav nav-pills">
-      <li class="nav-item"><a href="/Home/Index/" class="nav-link active" aria-current="page">Home</a></li>
-      <li class="nav-item"><a href="/Card/ShowRandomCards/" class="nav-link">CARD</a></li>
-    </ul>
-  </header>
+@using My101Romance.Services
+@model My101Romance.Services.Config
+
+<nav class="navbar navbar-expand-lg navbar-light" style="background-color: #FFC0CB;">
+  <div class="container-fluid justify-content-center p-0">
+    <a class="navbar-brand d-flex align-items-center" href="#">
+      <img src="favicon.ico" alt="Іконка" class="img-fluid" style="width: 40px; height: 40px;">
+      <span class="d-lg-inline d-none ml-2">@Config.ProjectName</span>
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse justify-content-between" id="navbarNav">
+      <ul class="navbar-nav text-center">
+        <li class="nav-item">
+          <a class="nav-link font-weight-bold" href="#">Головна</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link font-weight-bold" href="#">Рейтинг</a>
+        </li>
+        <li class="nav-item active">
+          <a class="nav-link font-weight-bold" href="#">Гра</a>
+        </li>
+      </ul>
+      <div class="ml-lg-2 mr-lg-2 ml-0 mr-0 mb-2 mb-lg-0 text-center">
+        <!-- Добавлены классы "mx-auto" и "w-75" для центрирования и задания ширины кнопке -->
+        <button class="btn btn-light d-lg-inline d-none mx-auto w-75" type="button">log in / sing in</button>
+        <button class="btn btn-light d-lg-none btn-block mx-auto w-75" type="button">log in / sing in</button>
+      </div>
+    </div>
   </div>
+</nav>

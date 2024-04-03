@@ -1,19 +1,36 @@
-<div class="container-fluid">
-    <!-- Ваш контент здесь -->
+@using My101Romance.Services
+@model My101Romance.Services.Config
 
-    <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top text-muted footer">
-        <div class="col-md-4 d-flex align-items-center">
-            <a href="/" class="mb-3 me-2 mb-md-0 text-body-secondary text-decoration-none lh-1">
-                <svg class="bi" width="30" height="24"><use xlink:href="#bootstrap"></use></svg>
-            </a>
-            <span class="mb-3 mb-md-0 text-body-secondary">© 2024 Company, Inc</span>
-        </div>
-
-        <ul class="nav col-md-4 justify-content-end list-unstyled d-flex">
-            <li class="ms-3"><a class="text-body-secondary" href="#"><svg class="bi" width="24" height="24"><use xlink:href="#twitter"></use></svg></a></li>
-            <li class="ms-3"><a class="text-body-secondary" href="#"><svg class="bi" width="24" height="24"><use xlink:href="#instagram"></use></svg></a></li>
-            <li class="ms-3"><a class="text-body-secondary" href="#"><svg class="bi" width="24" height="24"><use xlink:href="#facebook"></use></svg></a></li>
+<footer class="text-orange footer py-5" style="background-color: #FFC0CB; bottom: 0;">
+  <div class="container">
+    <div class="row">
+      <!-- Логотип та назва проекту -->
+      <div class="col-md-4">
+        <h5>@Config.ProjectName</h5>
+        <p>@Config.ProjectShortDesc</p>
+      </div>
+      <!-- Контакти -->
+      <div class="col-md-4">
+        <h5>Go-to-Action</h5>
+        <p>
+          Email: @Config.Email<br>
+          Phone: @Config.ContactPhone
+          <br/>
+          Phone: @Config.ContactPhoneShort
+          
+        </p>
+      </div>
+      <!-- Посилання на соцмережі -->
+      <div class="col-md-4">
+        <h5>Social Links</h5>
+        <ul class="list-unstyled">
+          <li><a href="@Config.Facebook"><i class="fab fa-facebook-f"></i> Facebook</a></li>
+          <li><a href="@Config.Twitter"><i class="fab fa-twitter"></i> Twitter/X</a></li>
+          <li><a href="@Config.Instagram"><i class="fab fa-instagram"></i> Instagram</a></li>
+          <li><a href="@Config.LinkedIn"><i class="fab fa-linkedin-in"></i> LinkedIn</a></li>
         </ul>
-    </footer>
-</div>
+      </div>
+    </div>
+  </div>
+</footer>
 

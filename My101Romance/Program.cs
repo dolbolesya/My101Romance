@@ -20,6 +20,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 });
 
 builder.Configuration.Bind("Project", new Config());
+builder.Configuration.Bind("SocialLinks", new Config());
 
 builder.Services.AddScoped<ICardRepository, CardRepository>();
 builder.Services.AddScoped<ICardService, CardService>();
@@ -46,13 +47,6 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
-app.MapControllerRoute(
-    name: "randomCard",
-    pattern:"card/random",
-    defaults: new
-    {
-        controller = "Card",
-        action = "ShowRandomCards"
-    });
+
 app.Run();
 
