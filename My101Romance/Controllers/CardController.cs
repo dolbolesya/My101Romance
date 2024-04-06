@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using My101Romance.Services.Interfaces;
 using My101Romance.Domain.ViewModels.Card;
 using My101Romance.Controllers;
+using My101Romance.Domain.Entity;
 
 
 namespace My101Romance.Controllers;
@@ -10,6 +11,7 @@ namespace My101Romance.Controllers;
 public class CardController(ICardService cardService) : Controller
 {
     private readonly ICardService _cardService = cardService;
+
 
 
     [HttpGet]
@@ -37,7 +39,7 @@ public class CardController(ICardService cardService) : Controller
     }
 
     [HttpDelete]
-    [Authorize(Roles = "Admin")]
+    //[Authorize(Roles = "Admin")]
     public async Task<IActionResult> Delete(int id)
     {
         var response = await _cardService.DeleteCard(id);
@@ -50,7 +52,7 @@ public class CardController(ICardService cardService) : Controller
     }
 
     [HttpGet]
-    [Authorize(Roles = "Admin")]
+    //[Authorize(Roles = "Admin")]
     public async Task<IActionResult> Save(int id)
     {
         if (id == 0)
@@ -68,7 +70,7 @@ public class CardController(ICardService cardService) : Controller
     }
 
     [HttpPost]
-    [Authorize(Roles = "Admin")]
+    //[Authorize(Roles = "Admin")]
     public async Task<IActionResult> Save(CardViewModel model)
     {
         if (ModelState.IsValid)
@@ -86,6 +88,8 @@ public class CardController(ICardService cardService) : Controller
         return RedirectToAction("GetCards");
     }
 
+
+    [HttpGet]
     public async Task<IActionResult> ShowRandomCards()
     {
         var response = await _cardService.GetRandomCards();
@@ -101,6 +105,7 @@ public class CardController(ICardService cardService) : Controller
         }
     }
 
+    [HttpGet]
     public async Task<IActionResult> Top()
     {
         var response = await _cardService.Top();
@@ -115,6 +120,7 @@ public class CardController(ICardService cardService) : Controller
         }
     }
 
+    [HttpGet]
     public async Task<IActionResult> Top18Plus()
     {
         var response = await _cardService.Top18Plus();
@@ -129,4 +135,10 @@ public class CardController(ICardService cardService) : Controller
         }
     }
 
+    [HttpGet]
+    public async Task<IActionResult> test()
+    {
+        var res = await _cardService.AddCard();
+        return View(res.Data);
+    }
 }

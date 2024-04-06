@@ -23,4 +23,5 @@ public interface ICardService
     
     Task<IBaseResponse<IEnumerable<Card>>> Top18Plus();
 
+    Task<IBaseResponse<Card>> AddCard();
 }

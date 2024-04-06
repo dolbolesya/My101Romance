@@ -1,7 +1,10 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using My101Romance.DAL;
 using My101Romance.DAL.Interfaces;
 using My101Romance.DAL.Repositories;
+using My101Romance.Domain.Entity;
 using My101Romance.Services;
 using My101Romance.Services.Implementations;
 using My101Romance.Services.Interfaces;
@@ -18,6 +21,13 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration["ConnectionStrings:DefaultConnection"]);
     
 });
+
+builder.Services.AddIdentity<User, IdentityRole>()
+    .AddEntityFrameworkStores<AppDbContext>();
+builder.Services.AddMemoryCache();
+builder.Services.AddSession();
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie();
 
 builder.Configuration.Bind("Project", new Config());
 builder.Configuration.Bind("SocialLinks", new Config());

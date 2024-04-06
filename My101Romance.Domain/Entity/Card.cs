@@ -1,8 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections;
+using System.ComponentModel.DataAnnotations;
 
 namespace My101Romance.Domain.Entity;
 
-public class Card
+public class Card : IEnumerable
 {
     [Required]
     [Key]
@@ -25,4 +26,6 @@ public class Card
     
     [Display(Name = "Відображення для усіх користувачів")]
     public bool IsForAll { get; set; }
+
+
 }

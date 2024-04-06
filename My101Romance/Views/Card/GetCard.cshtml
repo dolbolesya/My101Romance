@@ -1,11 +1,12 @@
 @using My101Romance.Domain.Entity
 @model My101Romance.Domain.Entity.Card
 @{
-    ViewBag.Title = "my title";
     Layout = "_Layout";
 }
+<div class="justify-content-center">
+   <p>id: @Model.Id</p>
+   <p>title: @Model.Title</p>
+   <p>Desc: @Model.Description</p>
+   <p>RAting: @Model.Rating</p> 
+</div>
 
-<p>id: @Model.Id</p>
-<p>title: @Model.Title</p>
-<p>Desc: @Model.Description</p>
-<p>RAting: @Model.Rating</p>

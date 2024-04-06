@@ -51,6 +51,7 @@ public class CardService : ICardService
             var cards = await _CardRepository.Select();
             if (cards.Count == 0)
             {
+                
                 baseResponse.ErrDescription = "Found 0 elements";
                 baseResponse.StatusCode = StatusCode.CardNotFound;
             }
@@ -101,12 +102,14 @@ public class CardService : ICardService
         var baseResponse = new BaseResponse<CardViewModel>();
         try
         {
+            Random r = new Random();
             var card = new Card()
             {
+                
                 Title = "text",
                 Description = "view desc test",
-                IsForAll = true,
-                Rating = 0
+                IsForAll = r.Next(2)==0,
+                Rating = r.Next(1,101)
 
             };
 
@@ -273,5 +276,42 @@ public class CardService : ICardService
         }
 
         return baseResponse;
+    }
+
+    public async  Task<IBaseResponse<Card>> AddCard()
+    {
+        var baseResponse = new BaseResponse<Card>();
+        try
+        {
+            Random r = new Random();
+            var card = new Card()
+            {
+                
+                Title = "text",
+                Description = "view desc test",
+                IsForAll = r.Next(2)==0,
+                Rating = r.Next(1,101)
+
+            };
+
+            await _CardRepository.Create(card);
+
+
+            baseResponse.Data = card;
+            baseResponse.StatusCode = StatusCode.Ok;
+            return baseResponse;
+        }
+        catch (Exception e)
+        {
+            return new BaseResponse<Card>()
+            {
+                ErrDescription = $"[AddCard]: {e.Message}",
+                StatusCode = StatusCode.InternalServerError
+            };
+        }
+
+        
+        
+        
     }
 }

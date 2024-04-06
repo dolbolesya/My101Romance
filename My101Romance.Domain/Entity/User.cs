@@ -1,9 +1,11 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Identity;
+
 
 namespace My101Romance.Domain.Entity;
 
-public class User
+public class User : IdentityUser
 {
     [Required]
     [Key]
