@@ -22,7 +22,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     
 });
 
-builder.Services.AddIdentity<User, IdentityRole>()
+builder.Services.AddIdentity<AppUser, IdentityRole>()
     .AddEntityFrameworkStores<AppDbContext>();
 builder.Services.AddMemoryCache();
 builder.Services.AddSession();
@@ -34,6 +34,9 @@ builder.Configuration.Bind("SocialLinks", new Config());
 
 builder.Services.AddScoped<ICardRepository, CardRepository>();
 builder.Services.AddScoped<ICardService, CardService>();
+builder.Services.AddScoped<IAccountService, AccountService>(); // Регистрация реализации IAccountService
+builder.Services.AddScoped<IAccountRepository, AccountRepository>(); 
+
 
 
 

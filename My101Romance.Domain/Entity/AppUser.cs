@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace My101Romance.Domain.Entity;
 
-public class User : IdentityUser
+public class AppUser : IdentityUser
 {
     [Required]
     [Key]
@@ -14,8 +14,10 @@ public class User : IdentityUser
     public string? Username { get; set; }
     
     [Required]
-    [EmailAddress]
+    [DataType(DataType.EmailAddress)]
     public string? Email { get; set; }
     
+    [Required]
+    [DataType(DataType.Password)]
     public string? Pwd { get; set; }
 }

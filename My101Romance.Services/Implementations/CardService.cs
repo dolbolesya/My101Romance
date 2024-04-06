@@ -56,7 +56,7 @@ public class CardService : ICardService
                 baseResponse.StatusCode = StatusCode.CardNotFound;
             }
 
-            baseResponse.Data = cards;
+            baseResponse.Data = cards!;
             baseResponse.StatusCode = StatusCode.Ok;
             return baseResponse;
         }
@@ -278,7 +278,7 @@ public class CardService : ICardService
         return baseResponse;
     }
 
-    public async  Task<IBaseResponse<Card>> AddCard()
+    public async Task<IBaseResponse<Card>> AddCard()
     {
         var baseResponse = new BaseResponse<Card>();
         try
@@ -295,6 +295,7 @@ public class CardService : ICardService
             };
 
             await _CardRepository.Create(card);
+            
 
 
             baseResponse.Data = card;

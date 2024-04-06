@@ -6,17 +6,13 @@ public interface IBaseRepository<T>
 {
     Task<bool> Create(T entity);
 
-    Task<Card?> Get(int id);
+    Task<T?> Get(int id);
 
-    Task<List<Card?>> Select();
+    Task<List<T?>> Select();
 
     Task<bool> Delete(T entity);
 
     Task<T> Update(T entity);
 
-    Task<IEnumerable<Card>> SelectTwoCards();
 
-    Task<IEnumerable<Card?>> GetTop();
-
-    Task<IEnumerable<Card>> GetTop18Plus();
 }

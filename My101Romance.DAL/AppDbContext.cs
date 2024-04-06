@@ -5,7 +5,7 @@ using My101Romance.Domain.Entity;
 
 namespace My101Romance.DAL;
 
-public sealed class AppDbContext : IdentityDbContext<User>
+public sealed class AppDbContext : IdentityDbContext<AppUser>
 {
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
     {
@@ -14,5 +14,5 @@ public sealed class AppDbContext : IdentityDbContext<User>
 
     public DbSet<Card> Card { get; set; }
     
-    public DbSet<User> User { get; set; }
+    public DbSet<AppUser> User { get; set; }
 }

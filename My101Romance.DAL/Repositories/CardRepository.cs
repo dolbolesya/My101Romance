@@ -13,7 +13,7 @@ public class CardRepository : ICardRepository
         _db = db;
     }
     
-    public async Task<bool> Create(Card? entity)
+    public async Task<bool> Create(Card entity)
     {
         _db.Card!.Add(entity);
         await _db.SaveChangesAsync();

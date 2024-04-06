@@ -1,5 +1,9 @@
 @using My101Romance.Services
 
+@{
+    string path = Context.Request.Path;
+}
+
 <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #FFC0CB;">
   <div class="container-fluid justify-content-center p-0">
     <a class="navbar-brand d-flex align-items-center" href="#">
@@ -15,7 +19,7 @@
           <a class="nav-link font-weight-bold" href="/">Головна</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link font-weight-bold" href="../../Card/Top#">Рейтинг</a>
+          <a class="nav-link font-weight-bold" href="../../Card/Top">Рейтинг</a>
         </li>
         <li class="nav-item active">
           <a class="nav-link font-weight-bold" href="#">Гра</a>
@@ -25,11 +29,21 @@
         </li>
                 
       </ul>
-      <div class="ml-lg-2 mr-lg-2 ml-0 mr-0 mb-2 mb-lg-0 text-center">
-        <!-- Добавлены классы "mx-auto" и "w-75" для центрирования и задания ширины кнопке -->
-        <button class="btn btn-light d-lg-inline d-none mx-auto w-75" type="button">log in / sing in</button>
-        <button class="btn btn-light d-lg-none btn-block mx-auto w-75" type="button">log in / sing in</button>
-      </div>
+      @if (path == "/Account/Login")
+      {
+        <div class="ml-lg-2 mr-lg-2 ml-0 mr-0 mb-2 mb-lg-0 text-center" style="margin-right: 5%">
+          :)
+        </div>
+      }
+      else
+      {
+        <div class="ml-lg-2 mr-lg-2 ml-0 mr-0 mb-2 mb-lg-0 text-center">
+          <!-- Добавлены классы "mx-auto" и "w-75" для центрирования и задания ширины кнопке -->
+          <button onclick="location.href='/Account/Login'" class="btn btn-light d-lg-inline d-none mx-auto w-75" type="button">log in / sing in</button>
+          <button onclick="location.href='/Account/Login'" class="btn btn-light d-lg-none btn-block mx-auto w-75" type="button">log in / sing in</button>
+        </div>
+      }
+      
     </div>
   </div>
 </nav>
