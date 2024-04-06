@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace My101Romance.Domain.Entity;
 
-public class Card : IEnumerable
+public class Card 
 {
     [Required]
     [Key]
