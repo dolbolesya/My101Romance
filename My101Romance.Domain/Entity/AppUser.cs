@@ -14,6 +14,6 @@ namespace My101Romance.Domain.Entity
 
         [Required]
         [DataType(DataType.Password)]
-        public string Pwd { get; set; }
+        public string Password { get; set; }
     }
 }

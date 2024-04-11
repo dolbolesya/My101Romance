@@ -2,75 +2,56 @@ using My101Romance.DAL.Interfaces;
 using My101Romance.Domain.Entity;
 using My101Romance.Domain.Enum;
 using My101Romance.Domain.Response;
+using My101Romance.Domain.ViewModels.Register;
 using My101Romance.Services.Interfaces;
 
 namespace My101Romance.Services.Implementations;
 
 public class AccountService : IAccountService
 {
-    public readonly IAccountRepository _AccountRepository;
+    public readonly IAccountRepository _accountRepository;
 
     public AccountService(IAccountRepository accountRepository)
     {
-        _AccountRepository = accountRepository;
+        _accountRepository = accountRepository;
     }
 
-    public async Task<IBaseResponse<AppUser>> GetUser(int id)
+    public async Task<IBaseResponse<AppUser>> RegisterUser(RegisterViewModel model)
     {
         var baseResponse = new BaseResponse<AppUser>();
+
         try
         {
-            var user = await _AccountRepository.Get(id);
-            if (user == null)
+            var existingUser = await _accountRepository.FindByEmailAsync(model.Email);
+            if (existingUser != null)
             {
-                baseResponse.ErrDescription = $"Item not found by {id}";
+                baseResponse.ErrDescription = "User with this email already exists.";
                 baseResponse.StatusCode = StatusCode.NotFound;
                 return baseResponse;
             }
 
+            var user = new AppUser
+            {
+                Email = model.Email,
+                UserName = model.UserName, // Assuming UserName is part of the RegisterViewModel
+                Password = model.Password // Assuming Password is part of the RegisterViewModel
+            };
+
+            await _accountRepository.Create(user);
+
             baseResponse.Data = user;
             baseResponse.StatusCode = StatusCode.Ok;
             return baseResponse;
-
         }
         catch (Exception e)
         {
-            return new BaseResponse<AppUser>()
+            return new BaseResponse<AppUser>
             {
-                ErrDescription = $"[GetUser]: {e.Message}",
+                ErrDescription = $"Error registering user: {e.Message}",
                 StatusCode = StatusCode.InternalServerError
             };
         }
-    }
-    
-    public async Task<IBaseResponse<IEnumerable<AppUser>>> GetUsers()
-    {
-        var baseResponse = new BaseResponse<IEnumerable<AppUser>>();
-        try
-        {
-            var users = await _AccountRepository.Select();
-            if (users.Count == 0)
-            {
-                
-                baseResponse.ErrDescription = "Found 0 elements";
-                baseResponse.StatusCode = StatusCode.NotFound;
-            }
-
-            baseResponse.Data = users!;
-            baseResponse.StatusCode = StatusCode.Ok;
-            return baseResponse;
-        }
-        catch (Exception e)
-        {
-            return new BaseResponse<IEnumerable<AppUser>>()
-            {
-                ErrDescription = $"[GetUsers]: {e.Message}",
-                StatusCode = StatusCode.InternalServerError
-            };
-        }
-    }
-    
-    
+    }    
     public async Task<IBaseResponse<AppUser>> AddUser()
     {
         var baseResponse = new BaseResponse<AppUser>();
@@ -80,10 +61,10 @@ public class AccountService : IAccountService
             {
                 Email = "test@mail",
                 UserName = "User",
-                Pwd = "1111"
+                Password = "1111"
             };
 
-            await _AccountRepository.Create(user);
+            await _accountRepository.Create(user);
             
 
 

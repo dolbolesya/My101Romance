@@ -5,5 +5,5 @@ namespace My101Romance.DAL.Interfaces;
 
 public interface IAccountRepository : IBaseRepository<AppUser>
 {
-    
+    Task<AppUser> FindByEmailAsync(string modelEmail);
 }

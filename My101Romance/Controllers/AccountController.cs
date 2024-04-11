@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using My101Romance.Domain.Entity;
 using My101Romance.Domain.ViewModels.Login;
+using My101Romance.Domain.ViewModels.Register;
 using My101Romance.Services.Interfaces;
 
 namespace My101Romance.Controllers;
@@ -13,7 +14,9 @@ public class AccountController : Controller
     private readonly SignInManager<AppUser> _signInManager;
     private readonly IAccountService _accountService;
 
-    public AccountController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, IAccountService accountService) 
+    public AccountController(UserManager<AppUser> userManager, 
+        SignInManager<AppUser> signInManager, 
+        IAccountService accountService) 
     {
         _userManager = userManager;
         _signInManager = signInManager;
@@ -68,20 +71,37 @@ public class AccountController : Controller
         return View("dev/AddUser",response.Data);
     }
 
+    
     [HttpGet]
-    public async Task<IActionResult> GetUser(int id)
-    {
-        var response = await _accountService.GetUser(id);
-        if (response.StatusCode == Domain.Enum.StatusCode.Ok)
-        {
-            return View("dev/GetUser",response.Data);
-        }
-        return RedirectToAction("Error", "Home");
-    }
-
-    [HttpPost]
     public async Task<IActionResult> Register()
     {
         return View("auth/Register");
     }
+    
+    [HttpPost]
+    public async Task<IActionResult> Register(RegisterViewModel model)
+    {
+        if (ModelState.IsValid)
+        {
+            var user = new AppUser()
+            {
+                Email = model.Email,
+                UserName = model.UserName,
+            };
+            var result = await _userManager.CreateAsync(user, model.Password);
+
+            if (result.Succeeded)
+            {
+                _signInManager.SignInAsync(user, isPersistent: false);
+                return RedirectToAction("Index", "Home");
+            }
+
+            foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError("",error.Description);
+            }
+        }
+        return View("auth/Register");
+    }
+    
 }

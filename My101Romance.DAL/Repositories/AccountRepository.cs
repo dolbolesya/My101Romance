@@ -70,5 +70,10 @@ namespace My101Romance.DAL.Repositories
                 return null;
             }
         }
+
+        public async Task<AppUser> FindByEmailAsync(string modelEmail)
+        {
+            return await _db.User.FirstOrDefaultAsync(u => u.Email == modelEmail);
+        }
     }
 }
