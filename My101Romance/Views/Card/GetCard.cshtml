@@ -3,10 +3,16 @@
 @{
     Layout = "_Layout";
 }
-<div class="justify-content-center">
-   <p>id: @Model.Id</p>
-   <p>title: @Model.Title</p>
-   <p>Desc: @Model.Description</p>
-   <p>RAting: @Model.Rating</p> 
-</div>
+<br/>
 
+<div class="flip-card">
+    <div class="flip-card-inner">
+        <div class="flip-card-front">
+            <img src="@Model.ImagePath" alt="Front Image" style="width:300px;height:200px;">
+        </div>
+        <div class="flip-card-back">
+            <h1>@Model.Title</h1>
+            <p>@Model.Description</p>
+        </div>
+    </div>
+</div>

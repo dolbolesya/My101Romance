@@ -17,8 +17,9 @@ public class Card
     [Display(Name = "Опис")]
     public string? Description { get; set; }
 
-    //[Display(Name = "Зображення")]
-    //public string? ImagePath { get; set; }
+    [Display(Name = "Зображення")]
+    public string? ImagePath { get; set; } =
+        "https://images.prom.ua/1065612508_w640_h640_vafelnaya-kartinka-lyubov.jpg";
     
     [Display(Name = "Рейтинг")]
     public int Rating { get; set; } 

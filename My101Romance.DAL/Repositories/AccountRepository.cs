@@ -10,6 +10,7 @@ namespace My101Romance.DAL.Repositories
     public class AccountRepository : IAccountRepository
     {
         private readonly AppDbContext _db;
+        private IAccountRepository _accountRepositoryImplementation;
 
         public AccountRepository(AppDbContext db)
         {
@@ -29,6 +30,8 @@ namespace My101Romance.DAL.Repositories
                 return false;
             }
         }
+
+
 
         public async Task<AppUser?> Get(int id)
         {

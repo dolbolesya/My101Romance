@@ -70,6 +70,7 @@ public class CardService : ICardService
         }
     }
 
+
     public async Task<IBaseResponse<Card>> GetCardByTitle(string title)
     {
         var baseResponse = new BaseResponse<Card>();
@@ -310,8 +311,6 @@ public class CardService : ICardService
                 StatusCode = StatusCode.InternalServerError
             };
         }
-
-        
         
         
     }

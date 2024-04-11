@@ -21,7 +21,7 @@ public class AccountController : Controller
     }
     public IActionResult Login()
     {
-        //var response = new LoginViewModel();
+        var response = new LoginViewModel();
         return View();
     }
     
@@ -57,5 +57,22 @@ public class AccountController : Controller
         return View(loginViewModel);
 
 
+    }
+
+
+    public async Task<IActionResult> AddUser()
+    {
+        var response = await _accountService.AddUser();
+        return View(response.Data);
+    }
+
+    public async Task<IActionResult> GetUser(int id)
+    {
+        var response = await _accountService.GetUser(id);
+        if (response.StatusCode == Domain.Enum.StatusCode.Ok)
+        {
+            return View(response.Data);
+        }
+        return RedirectToAction("Error", "Home");
     }
 }
