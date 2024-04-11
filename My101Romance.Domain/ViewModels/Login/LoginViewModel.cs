@@ -14,7 +14,7 @@ public class LoginViewModel
     
     [Required(ErrorMessage = "Password is required!")]
     [DataType(DataType.Password)]
-    public string Pwd { get; set; }
+    public string Password { get; set; }
     
     
 }
