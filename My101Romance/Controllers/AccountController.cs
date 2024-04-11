@@ -19,10 +19,12 @@ public class AccountController : Controller
         _signInManager = signInManager;
         _accountService = accountService;
     }
+    
+    
     public IActionResult Login()
     {
         var response = new LoginViewModel();
-        return View();
+        return View("auth/Login");
     }
     
     [HttpPost]
@@ -30,19 +32,19 @@ public class AccountController : Controller
     {
         if (!ModelState.IsValid)
         {
-            return View(loginViewModel);
+            return View("auth/Login",loginViewModel);
         }
 
         var user = await _userManager.FindByEmailAsync(loginViewModel.Email);
         if (user != null)
         {   
             //User is found, check pwd
-            var pwdCheck = await _userManager.CheckPasswordAsync(user, loginViewModel.Pwd);
+            var pwdCheck = await _userManager.CheckPasswordAsync(user, loginViewModel.Password);
             if (pwdCheck)
             {
                 //pwd correct, sing in
                 var result = await _signInManager
-                    .PasswordSignInAsync(user, loginViewModel.Pwd, false, false);
+                    .PasswordSignInAsync(user, loginViewModel.Password, false, false);
                 if (result.Succeeded)
                 {
                     return RedirectToAction("Index", "Home");
@@ -50,11 +52,11 @@ public class AccountController : Controller
             }
             //pwd is incorrect
             TempData["Error"] = "Wrong. Please, try again!";
-            return View(loginViewModel);
+            return View("auth/Login",loginViewModel);
         }
         //user not found
         TempData["Error"] = "Wrong. User not found!";
-        return View(loginViewModel);
+        return View("auth/Login",loginViewModel);
 
 
     }
@@ -63,16 +65,23 @@ public class AccountController : Controller
     public async Task<IActionResult> AddUser()
     {
         var response = await _accountService.AddUser();
-        return View(response.Data);
+        return View("dev/AddUser",response.Data);
     }
 
+    [HttpGet]
     public async Task<IActionResult> GetUser(int id)
     {
         var response = await _accountService.GetUser(id);
         if (response.StatusCode == Domain.Enum.StatusCode.Ok)
         {
-            return View(response.Data);
+            return View("dev/GetUser",response.Data);
         }
         return RedirectToAction("Error", "Home");
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Register()
+    {
+        return View("auth/Register");
     }
 }

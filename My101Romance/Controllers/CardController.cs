@@ -20,7 +20,7 @@ public class CardController(ICardService cardService) : Controller
         var response = await _cardService.GetCards();
         if (response.StatusCode == Domain.Enum.StatusCode.Ok)
         {
-            return View(response.Data);
+            return View("dev/GetCards",response.Data);
         }
 
         return RedirectToAction("Error", "Home");
@@ -32,7 +32,7 @@ public class CardController(ICardService cardService) : Controller
         var response = await _cardService.GetCard(id);
         if (response.StatusCode == Domain.Enum.StatusCode.Ok)
         {
-            return View(response.Data);
+            return View("dev/GetCard",response.Data);
         }
 
         return RedirectToAction("Error", "Home");
@@ -57,13 +57,13 @@ public class CardController(ICardService cardService) : Controller
     {
         if (id == 0)
         {
-            return View();
+            return View("dev/Save");
         }
 
         var response = await _cardService.GetCard(id);
         if (response.StatusCode == Domain.Enum.StatusCode.Ok)
         {
-            return View(response.Data);
+            return View("dev/Save",response.Data);
         }
 
         return RedirectToAction("Error", "Home");
@@ -112,7 +112,7 @@ public class CardController(ICardService cardService) : Controller
         if (response.StatusCode == Domain.Enum.StatusCode.Ok)
         {
             var cards = response.Data;
-            return View(cards);
+            return View("top/Top",cards);
         }
         else
         {
@@ -127,7 +127,7 @@ public class CardController(ICardService cardService) : Controller
         if (response.StatusCode == Domain.Enum.StatusCode.Ok)
         {
             var cards = response.Data;
-            return View(cards);
+            return View("top/Top18Plus",cards);
         }
         else
         {
@@ -136,9 +136,9 @@ public class CardController(ICardService cardService) : Controller
     }
 
     [HttpGet]
-    public async Task<IActionResult> test()
+    public async Task<IActionResult> AddCard()
     {
         var res = await _cardService.AddCard();
-        return View(res.Data);
+        return View("dev/test",res.Data);
     }
 }

@@ -1,0 +1,15 @@
+@using My101Romance.Domain.Entity
+@model My101Romance.Domain.Entity.Card
+
+<div class="flip-card">
+    <div class="flip-card-inner">
+        <div class="flip-card-front">
+            <img src="@Model.ImagePath" alt="Front Image" style="width:300px;height:200px;">
+        </div>
+        <div class="flip-card-back">
+            <h1>@Model.Title</h1>
+            <p>@Model.Rating</p>
+            <p>@Model.Description</p>
+        </div>
+    </div>
+</div>
