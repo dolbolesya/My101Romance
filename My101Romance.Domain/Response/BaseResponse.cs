@@ -10,7 +10,7 @@ public class BaseResponse<T> : IBaseResponse<T>
     
     public StatusCode StatusCode { get; set; }
     
-    public T Data { get; set; }
+    public T? Data { get; set; }
 
 
 
@@ -19,5 +19,5 @@ public class BaseResponse<T> : IBaseResponse<T>
 public interface IBaseResponse<T> 
 {
     StatusCode StatusCode { get; }
-    T Data { get; set; }
+    T? Data { get; set; }
 }

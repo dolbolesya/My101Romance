@@ -1,7 +1,7 @@
 @model My101Romance.Domain.ViewModels.Register.RegisterViewModel
 
 @{
-    ViewData["Title"] = "New User ^_^";
+    ViewData["Title"] = "New User";
 }
 
 <div class="container">
@@ -11,6 +11,7 @@
                 <div class="card-header">Register</div>
                 <div class="card-body">
                     <form asp-action="Register" method="post" asp-validation-summary="All">
+
                         <div class="form-group">
                             <label asp-for="UserName">Username</label>
                             <input asp-for="UserName" class="form-control" placeholder="Enter your username" required>
@@ -32,8 +33,16 @@
                             <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
                         </div>
                         <br/>
+                        
+                        @* Вывод общих ошибок *@
+                        <div asp-validation-summary="All" class="text-danger"></div>
+
+                        <br/>
                         <button type="submit" class="btn btn-primary">Register</button>
+
+
                     </form>
+                    <br/>
                 </div>
             </div>
         </div>

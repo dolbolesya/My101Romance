@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using My101Romance.DAL.Interfaces;
 using My101Romance.Domain.Entity;
@@ -7,13 +8,15 @@ namespace My101Romance.DAL.Repositories
     public class AccountRepository : IAccountRepository
     {
         private readonly AppDbContext _db;
+        private readonly UserManager<AppUser> _userManager;
 
-        public AccountRepository(AppDbContext db)
+        public AccountRepository(AppDbContext db, UserManager<AppUser> userManager)
         {
             _db = db;
+            _userManager = userManager;
         }
 
-        public async Task<bool> Create(AppUser entity)
+        public async Task<bool> Create(AppUser? entity)
         {
             try
             {
@@ -37,7 +40,7 @@ namespace My101Romance.DAL.Repositories
             return await _db.User.ToListAsync();
         }
 
-        public async Task<bool> Delete(AppUser entity)
+        public async Task<bool> Delete(AppUser? entity)
         {
             try
             {
@@ -51,7 +54,7 @@ namespace My101Romance.DAL.Repositories
             }
         }
 
-        public async Task<AppUser?> Update(AppUser entity)
+        public async Task<AppUser?> Update(AppUser? entity)
         {
             try
             {
@@ -68,6 +71,19 @@ namespace My101Romance.DAL.Repositories
         public async Task<AppUser?> FindByEmailAsync(string modelEmail)
         {
             return await _db.User.FirstOrDefaultAsync(u => u.Email == modelEmail);
+        }
+
+        public async Task<bool> CreateUserAsync(AppUser user, string? password)
+        {
+            try
+            {
+                var result = await _userManager.CreateAsync(user, password);
+                return result.Succeeded;
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
         }
     }
 }

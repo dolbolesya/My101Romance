@@ -19,49 +19,38 @@ public class AccountService : IAccountService
     public async Task<IBaseResponse<AppUser>> RegisterUser(RegisterViewModel model)
     {
         var baseResponse = new BaseResponse<AppUser>();
-
-        try
+        var user = new AppUser
         {
-            var existingUser = await _accountRepository.FindByEmailAsync(model.Email);
-            if (existingUser != null)
-            {
-                baseResponse.ErrDescription = "User with this email already exists.";
-                baseResponse.StatusCode = StatusCode.NotFound;
-                return baseResponse;
-            }
+            UserName = model.UserName,
+            Email = model.Email
+        };
+        
+        
 
-            var user = new AppUser
-            {
-                Email = model.Email,
-                UserName = model.UserName, // Assuming UserName is part of the RegisterViewModel
-                Password = model.Password // Assuming Password is part of the RegisterViewModel
-            };
-
-            await _accountRepository.Create(user);
-
-            baseResponse.Data = user;
-            baseResponse.StatusCode = StatusCode.Ok;
+        var success = await _accountRepository.CreateUserAsync(user, model.Password);
+        if (!success)
+        {
+            baseResponse.ErrDescription = "Failed to register user.";
+            baseResponse.StatusCode = StatusCode.InternalServerError;
             return baseResponse;
         }
-        catch (Exception e)
-        {
-            return new BaseResponse<AppUser>
-            {
-                ErrDescription = $"Error registering user: {e.Message}",
-                StatusCode = StatusCode.InternalServerError
-            };
-        }
-    }    
-    public async Task<IBaseResponse<AppUser>> AddUser()
+        
+        baseResponse.Data = user;
+        baseResponse.StatusCode = StatusCode.Ok;
+        return baseResponse;
+    }
+    
+
+    public async Task<IBaseResponse<AppUser>> AddUser(RegisterViewModel model)
     {
         var baseResponse = new BaseResponse<AppUser>();
         try
         {
             var user = new AppUser()
             {
-                Email = "test@mail",
-                UserName = "User",
-                Password = "1111"
+                Email = model.Email,
+                UserName = model.UserName,
+                //Password = model.Password
             };
 
             await _accountRepository.Create(user);

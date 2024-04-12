@@ -13,14 +13,17 @@ public class AccountController : Controller
     private readonly UserManager<AppUser> _userManager;
     private readonly SignInManager<AppUser> _signInManager;
     private readonly IAccountService _accountService;
+    
+    private readonly ILogger<AccountController> _logger;
 
     public AccountController(UserManager<AppUser> userManager, 
         SignInManager<AppUser> signInManager, 
-        IAccountService accountService) 
+        IAccountService accountService, ILogger<AccountController> logger) 
     {
         _userManager = userManager;
         _signInManager = signInManager;
         _accountService = accountService;
+        _logger = logger;
     }
     
     
@@ -65,9 +68,9 @@ public class AccountController : Controller
     }
 
 
-    public async Task<IActionResult> AddUser()
+    public async Task<IActionResult> AddUser(RegisterViewModel model)
     {
-        var response = await _accountService.AddUser();
+        var response = await _accountService.AddUser(model);
         return View("dev/AddUser",response.Data);
     }
 
@@ -83,25 +86,68 @@ public class AccountController : Controller
     {
         if (ModelState.IsValid)
         {
-            var user = new AppUser()
-            {
-                Email = model.Email,
-                UserName = model.UserName,
-            };
-            var result = await _userManager.CreateAsync(user, model.Password);
+            // Логируем данные модели
+            _logger.LogInformation("Received registration request: {@Model}", model);
 
-            if (result.Succeeded)
+            var user = new AppUser
             {
-                _signInManager.SignInAsync(user, isPersistent: false);
+                UserName = model.UserName,
+                Email = model.Email
+                
+            };
+            
+            if (!string.IsNullOrEmpty(model.Password))
+            {
+                // Устанавливаем пароль для пользователя
+                user.PasswordHash = _userManager.PasswordHasher.HashPassword(user, model.Password);
+            }
+            else
+            {
+                // Выводим сообщение об ошибке, если пароль не указан
+                ModelState.AddModelError(nameof(RegisterViewModel.Password), "Please enter a password.");
+                return View("auth/Register", model);
+            }
+
+
+            var response = await _userManager.CreateAsync(user, model.Password);
+            if (response.Succeeded)
+            {
                 return RedirectToAction("Index", "Home");
             }
-
-            foreach (var error in result.Errors)
+            else
             {
-                ModelState.AddModelError("",error.Description);
+                foreach (var error in response.Errors)
+                {
+                    // Выводим ошибки в логи
+                    _logger.LogError("Error: {Description}", error.Description);
+
+                    // Добавляем ошибки в ModelState для отображения на странице
+                    ModelState.AddModelError(string.Empty, error.Description);
+                }
+            }
+
+        }
+        else
+        {
+            // Логируем невалидное состояние модели и ошибки валидации
+            _logger.LogWarning("Invalid model state during registration: {@Model}", model);
+        
+            // Добавляем ошибку в ModelState для поля UserName
+            ModelState.AddModelError(nameof(RegisterViewModel.UserName), "Please enter a valid username.");
+        
+            foreach (var error in ModelState.Values.SelectMany(v => v.Errors))
+            {
+                _logger.LogWarning("Validation error: {ErrorMessage}", error.ErrorMessage);
             }
         }
-        return View("auth/Register");
+
+        // Возвращаем представление с моделью, содержащей ошибки валидации
+        return View("auth/Register", model);
     }
-    
+
+
+    public IActionResult Logout()
+    {
+        throw new NotImplementedException();
+    }
 }

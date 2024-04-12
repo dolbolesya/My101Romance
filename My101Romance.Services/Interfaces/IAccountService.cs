@@ -7,7 +7,7 @@ namespace My101Romance.Services.Interfaces;
 public interface IAccountService
 { 
     Task<IBaseResponse<AppUser>> RegisterUser(RegisterViewModel model);
-    Task<IBaseResponse<AppUser>> AddUser();
+    Task<IBaseResponse<AppUser>> AddUser(RegisterViewModel model);
 
     
 }
