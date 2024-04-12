@@ -1,16 +1,12 @@
 using Microsoft.EntityFrameworkCore;
 using My101Romance.DAL.Interfaces;
 using My101Romance.Domain.Entity;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace My101Romance.DAL.Repositories
 {
     public class AccountRepository : IAccountRepository
     {
         private readonly AppDbContext _db;
-        private IAccountRepository _accountRepositoryImplementation;
 
         public AccountRepository(AppDbContext db)
         {
@@ -30,8 +26,6 @@ namespace My101Romance.DAL.Repositories
                 return false;
             }
         }
-
-
 
         public async Task<AppUser?> Get(int id)
         {
@@ -71,7 +65,7 @@ namespace My101Romance.DAL.Repositories
             }
         }
 
-        public async Task<AppUser> FindByEmailAsync(string modelEmail)
+        public async Task<AppUser?> FindByEmailAsync(string modelEmail)
         {
             return await _db.User.FirstOrDefaultAsync(u => u.Email == modelEmail);
         }
