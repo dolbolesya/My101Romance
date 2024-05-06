@@ -17,7 +17,7 @@ public class CardRepository : ICardRepository
     {
         _db.Card!.Add(entity);
         await _db.SaveChangesAsync();
-
+        
         return true;
     }
 
@@ -47,9 +47,15 @@ public class CardRepository : ICardRepository
         return entity;
     }
 
-    public async Task<IEnumerable<Card>> SelectTwoCards()
+    public async Task<List<Card>> SelectEightCards()
     {
-        var randomCards = await _db.Card.OrderBy(x => Guid.NewGuid()).Take(8).ToListAsync();
+        var randomCards = await _db.Card.OrderBy(x => Guid.NewGuid()).Take(2).ToListAsync();
+        return randomCards;
+    }
+    
+    public async Task<List<Card>> TakeCards(int count)
+    {
+        var randomCards = await _db.Card.OrderBy(x => Guid.NewGuid()).Take(count).ToListAsync();
         return randomCards;
     }
 
@@ -72,6 +78,17 @@ public class CardRepository : ICardRepository
             .ToList();
 
         return cards;
+    }
+
+    public async Task<Card> GetCardById(int cardId)
+    {
+        return (await _db.Card.FindAsync(cardId))!;
+    }
+
+    public async Task UpdateCard(Card card)
+    {
+        _db.Entry(card).State = EntityState.Modified;
+        await _db.SaveChangesAsync();
     }
 
 

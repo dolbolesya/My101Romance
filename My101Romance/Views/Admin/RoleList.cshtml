@@ -1,0 +1,31 @@
+@model IEnumerable<Microsoft.AspNetCore.Identity.IdentityRole>
+
+@{
+Layout = "_Layout";
+}
+
+<h2>Roles</h2>
+
+@if (Model.Any())
+{
+@foreach (var role in Model)
+{
+<div class="card mb-3">
+    <div class="card-body">
+        <h5 class="card-title">Role: @role.Name</h5>
+        <p class="card-text">ID: @role.Id</p>
+        <a href="@Url.Action("EditRole", "Admin", new { id = role.Id })" class="btn btn-primary">Edit</a>
+        <a href="@Url.Action("DeleteRole", "Admin", new { id = role.Id })" class="btn btn-danger">Delete</a>
+    </div>
+</div>
+}
+}
+else
+{
+<p>No roles found. Redirecting...</p>
+<script>
+    setTimeout(function () {
+        window.location.href = '@Url.Action("CreateRole", "Admin")';
+    }, 3000); // Redirect after 3 seconds (3000 milliseconds)
+</script>
+}

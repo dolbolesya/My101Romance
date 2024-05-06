@@ -1,0 +1,9 @@
+/* CSS стили для анимации с помощью Animate.css */
+.animate__animated {
+    animation-duration: 1s; /* Длительность анимации */
+}
+
+/* Пример анимации "bounceIn" */
+.animate__bounceIn {
+    animation-name: bounceIn; /* Название анимации */
+}

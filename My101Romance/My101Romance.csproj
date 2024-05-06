@@ -86,8 +86,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Admin\Controllers\" />
-      <Folder Include="Admin\View\" />
       <Folder Include="wwwroot\saas\" />
     </ItemGroup>
     

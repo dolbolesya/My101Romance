@@ -1,7 +1,7 @@
 @model My101Romance.Domain.ViewModels.Login.LoginViewModel
 
 @{
-    ViewData["Title"] = "Login";
+ViewData["Title"] = "Login";
 }
 
 <div class="container">
@@ -21,9 +21,13 @@
                             <input asp-for="Password" type="password" class="form-control" placeholder="Enter your password" required>
                             <span asp-validation-for="Password" class="text-danger"></span>
                         </div>
+                        <!--<div class="alert alert-danger" role="alert" asp-validation-summary="All"></div>  Уведомление об ошибке -->
                         <br/>
                         <button type="submit" class="btn btn-primary">Login</button>
                     </form>
+                    <div class="mt-3">
+                        <p>Don't have an account? <a href="/register">Register here</a></p>
+                    </div>
                 </div>
             </div>
         </div>

@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
@@ -38,36 +39,33 @@ public class AccountController : Controller
     {
         if (!ModelState.IsValid)
         {
-            return View("auth/Login",loginViewModel);
+            return View("auth/Login", loginViewModel);
         }
 
         var user = await _userManager.FindByEmailAsync(loginViewModel.Email);
         if (user != null)
-        {   
-            //User is found, check pwd
-            var pwdCheck = await _userManager.CheckPasswordAsync(user, loginViewModel.Password);
-            if (pwdCheck)
+        {
+            var result = await _signInManager.PasswordSignInAsync(user, loginViewModel.Password, false, false);
+            if (result.Succeeded)
             {
-                //pwd correct, sing in
-                var result = await _signInManager
-                    .PasswordSignInAsync(user, loginViewModel.Password, false, false);
-                if (result.Succeeded)
-                {
-                    return RedirectToAction("Index", "Home");
-                }
+                return RedirectToAction("Index", "Home");
             }
-            //pwd is incorrect
-            TempData["Error"] = "Wrong. Please, try again!";
-            return View("auth/Login",loginViewModel);
+            else
+            {
+                ModelState.AddModelError(string.Empty, "Invalid email or password. Please try again.");
+                return View("auth/Login", loginViewModel);
+            }
         }
-        //user not found
-        TempData["Error"] = "Wrong. User not found!";
-        return View("auth/Login",loginViewModel);
-
-
+        else
+        {
+            ModelState.AddModelError(string.Empty, "User not found.");
+            return View("auth/Login", loginViewModel);
+        }
     }
 
 
+
+    [Authorize(Roles = "root, admin")]
     public async Task<IActionResult> AddUser(RegisterViewModel model)
     {
         var response = await _accountService.AddUser(model);
@@ -89,6 +87,14 @@ public class AccountController : Controller
             // Логируем данные модели
             _logger.LogInformation("Received registration request: {@Model}", model);
 
+            var existingUser = await _userManager.FindByEmailAsync(model.Email);
+            if (existingUser != null)
+            {
+                // Пользователь с такой почтой уже существует, добавляем ошибку в ModelState
+                ModelState.AddModelError(nameof(RegisterViewModel.Email), "User with this email already exists.");
+                return View("auth/Register", model);
+            }
+            
             var user = new AppUser
             {
                 UserName = model.UserName,
@@ -112,6 +118,7 @@ public class AccountController : Controller
             var response = await _userManager.CreateAsync(user, model.Password);
             if (response.Succeeded)
             {
+                await _userManager.AddToRoleAsync(user, "user");
                 return RedirectToAction("Index", "Home");
             }
             else
@@ -145,9 +152,10 @@ public class AccountController : Controller
         return View("auth/Register", model);
     }
 
-
-    public IActionResult Logout()
+    [HttpPost]
+    public async Task<IActionResult> Logout()
     {
-        throw new NotImplementedException();
+        await _signInManager.SignOutAsync();
+        return RedirectToAction("index", "Home");
     }
 }

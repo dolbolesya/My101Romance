@@ -5,6 +5,6 @@ namespace My101Romance.Domain.Entity
 {
     public class AppUser : IdentityUser
     {
-       
+
     }
 }

@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using My101Romance.CustomAuthRoute;
 using My101Romance.DAL;
 using My101Romance.DAL.Interfaces;
 using My101Romance.DAL.Repositories;
@@ -19,6 +20,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Добавляем сервисы в контейнер.
 builder.Services.AddControllersWithViews();
+builder.Services.AddServices();
+builder.Services.AddRepository();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
@@ -33,19 +36,23 @@ builder.Services.AddIdentity<AppUser, IdentityRole>(options =>
     options.Password.RequireNonAlphanumeric = true;
 })
     .AddEntityFrameworkStores<AppDbContext>();
+builder.Services.AddScoped<RoleManager<IdentityRole>>();
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.LoginPath = "/Account/Login";
+    options.LogoutPath = "/Account/Logout";
+});
 
 builder.Services.AddMemoryCache();
 builder.Services.AddSession();
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie();
 
+
 builder.Configuration.Bind("Project", new Config());
 builder.Configuration.Bind("SocialLinks", new Config());
 
-builder.Services.AddScoped<ICardRepository, CardRepository>();
-builder.Services.AddScoped<ICardService, CardService>();
-builder.Services.AddScoped<IAccountService, AccountService>();
-builder.Services.AddScoped<IAccountRepository, AccountRepository>();
+
 
 var app = builder.Build();
 
@@ -67,5 +74,54 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+// Добавляем маршрут для метода SelectCard в QuizController
+app.MapControllerRoute(
+    name: "quiz",
+    pattern: "Quiz/SelectCard",
+    defaults: new { controller = "Quiz", action = "SelectCard" });
+
+// Добавляем маршруты для аутентификации и управления пользователями
+app.MapControllerRoute(
+    name: "login",
+    pattern: "login",
+    defaults: new { controller = "Account", action = "Login" });
+
+app.MapControllerRoute(
+    name: "register",
+    pattern: "register",
+    defaults: new { controller = "Account", action = "Register" });
+
+app.MapControllerRoute(
+    name: "logout",
+    pattern: "Account/Logout",
+    defaults: new { controller = "Account", action = "Logout" });
+
+app.MapControllerRoute(
+    name: "quiz",
+    pattern: "quiz",
+    defaults: new { controller = "Quiz", action = "Play" });
+
+app.MapControllerRoute(
+    name: "top",
+    pattern: "top",
+    defaults: new { controller = "Card", action = "Top" },
+    constraints: new { isAuthenticated = new IsNotAuth() });
+
+app.MapControllerRoute(
+    name: "top18plus",
+    pattern: "top",
+    defaults: new { controller = "Card", action = "Top18Plus" },
+    constraints: new { isAuthenticated = new IsAuth() });
+
+app.MapControllerRoute(
+    name: "random",
+    pattern: "random",
+    defaults: new { controller = "Card", action = "ShowRandomCards" });
+
+app.MapControllerRoute(
+    name: "new role",
+    pattern: "admin/addrole",
+    defaults: new { controller = "Admin", action = "CreateRole" });
 
 app.Run();

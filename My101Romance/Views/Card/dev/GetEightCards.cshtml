@@ -1,0 +1,36 @@
+@model List<My101Romance.Domain.Entity.Card>
+
+<h1>Eight Cards</h1>
+
+<br />
+<div class="row justify-content-center">
+    <div class="col-md-4">
+        <!-- Пустий блок для відступу зліва -->
+    </div>
+    <div class="col-md-4">
+        @foreach (var card in Model)
+        {
+            <div class="flip-card" data-card-id="@card.Id" onclick="logCardId(this)">
+                <div class="flip-card-inner">
+                    <div class="flip-card-front">
+                        <img src="@card.ImagePath" alt="Front Image" style="width:300px;height:200px;" />
+                    </div>
+                    <div class="flip-card-back">
+                        <h1>@card.Title</h1>
+                        <p>@card.Description</p>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+    <div class="col-md-4">
+        <!-- Пустий блок для відступу справа -->
+    </div>
+</div>
+
+<script>
+    function logCardId(cardElement) {
+        var cardId = cardElement.dataset.cardId; 
+        console.log(cardId); 
+    }
+</script>

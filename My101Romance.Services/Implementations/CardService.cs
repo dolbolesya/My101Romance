@@ -9,7 +9,7 @@ namespace My101Romance.Services.Implementations;
 
 public class CardService : ICardService
 {
-    public readonly ICardRepository _CardRepository;
+    private readonly ICardRepository _CardRepository;
 
     public CardService(ICardRepository cardRepository)
     {
@@ -204,7 +204,7 @@ public class CardService : ICardService
         try
         {
             Random random = new Random();
-            var randomCards = await _CardRepository.SelectTwoCards();
+            var randomCards = await _CardRepository.SelectEightCards();
 
             if (randomCards.Count() == 0)
             {
@@ -277,6 +277,23 @@ public class CardService : ICardService
         }
 
         return baseResponse;
+    }
+
+    
+    public async Task<List<Card>> GetEightCards()
+    {
+        return await _CardRepository.SelectEightCards();
+
+    }
+
+    public async Task<Card> GetCardById(int cardId)
+    {
+        return await _CardRepository.GetCardById(cardId);
+    }
+
+    public async Task UpdateCard(Card card)
+    {
+        await _CardRepository.UpdateCard(card);
     }
 
     public async Task<IBaseResponse<Card>> AddCard()

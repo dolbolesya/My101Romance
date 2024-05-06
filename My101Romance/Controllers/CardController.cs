@@ -13,7 +13,7 @@ public class CardController(ICardService cardService) : Controller
     private readonly ICardService _cardService = cardService;
 
 
-
+    
     [HttpGet]
     public async Task<IActionResult> GetCards()
     {
@@ -39,7 +39,7 @@ public class CardController(ICardService cardService) : Controller
     }
 
     [HttpDelete]
-    //[Authorize(Roles = "Admin")]
+    [Authorize(Roles = "admin")]
     public async Task<IActionResult> Delete(int id)
     {
         var response = await _cardService.DeleteCard(id);
@@ -52,7 +52,7 @@ public class CardController(ICardService cardService) : Controller
     }
 
     [HttpGet]
-    //[Authorize(Roles = "Admin")]
+    [Authorize(Roles = "admin")]
     public async Task<IActionResult> Save(int id)
     {
         if (id == 0)
@@ -70,7 +70,7 @@ public class CardController(ICardService cardService) : Controller
     }
 
     [HttpPost]
-    //[Authorize(Roles = "Admin")]
+    [Authorize(Roles = "admin")]
     public async Task<IActionResult> Save(CardViewModel model)
     {
         if (ModelState.IsValid)
@@ -111,8 +111,15 @@ public class CardController(ICardService cardService) : Controller
         var response = await _cardService.Top();
         if (response.StatusCode == Domain.Enum.StatusCode.Ok)
         {
-            var cards = response.Data;
-            return View("top/Top",cards);
+            var cards = response.Data.ToList();
+            if (User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Top18Plus");
+            }
+            else
+            {
+                return View("top/Top", cards);
+            }
         }
         else
         {
@@ -120,6 +127,7 @@ public class CardController(ICardService cardService) : Controller
         }
     }
 
+    [Authorize]
     [HttpGet]
     public async Task<IActionResult> Top18Plus()
     {
@@ -127,7 +135,7 @@ public class CardController(ICardService cardService) : Controller
         if (response.StatusCode == Domain.Enum.StatusCode.Ok)
         {
             var cards = response.Data;
-            return View("top/Top18Plus",cards);
+            return View("top/Top18Plus", cards);
         }
         else
         {
@@ -135,10 +143,21 @@ public class CardController(ICardService cardService) : Controller
         }
     }
 
+    [Authorize(Roles = "root, admin")]
     [HttpGet]
     public async Task<IActionResult> AddCard()
     {
         var res = await _cardService.AddCard();
         return View("dev/test",res.Data);
     }
+    
+    [Authorize(Roles = "root, admin")]
+    public async Task<IActionResult> GetEightCards()
+    {
+        List<Card> cards = await _cardService.GetEightCards();
+        return View("dev/GetEightCards", cards);
+    }
+    
+
+
 }

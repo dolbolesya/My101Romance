@@ -1,0 +1,55 @@
+@model List<My101Romance.Domain.Entity.Card>
+
+<h1>Eight Cards</h1>
+
+<br />
+<div class="row justify-content-center" id="cardsContainer">
+    @foreach (var card in Model)
+    {
+    <div class="col-md-4">
+        <div class="flip-card" data-card-id="@card.Id" onclick="selectCard(@card.Id)">
+            <div class="flip-card-inner">
+                <div class="flip-card-front">
+                    <img src="@card.ImagePath" alt="Front Image" style="width:300px;height:200px;" />
+                </div>
+                <div class="flip-card-back">
+                    <h1>@card.Title</h1>
+                    <p>@card.Description</p>
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <p>id: @card.Id  </p>
+                        <p>Rating: @card.Rating</p>
+                    }
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+    }
+</div>
+<script>
+    function selectCard(cardId) {
+        fetch('/Quiz/SelectCard', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(cardId)
+        })
+            .then(response => {
+                if (!response.ok) {
+                    return response.json().then(data => {
+                        throw new Error(`Network response was not ok: ${data.message}`);
+                    });
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log(data); // Проверяем данные, которые получаем от сервера
+                window.location.reload(); // Перезагружаем страницу после успешного выбора карточки
+            })
+            .catch(error => {
+                console.error('Ошибка:', error);
+            });
+    }
+</script>

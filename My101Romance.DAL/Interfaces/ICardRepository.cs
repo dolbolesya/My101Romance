@@ -7,9 +7,13 @@ public interface ICardRepository : IBaseRepository<Card>
 {
     Task<Card?> GetByTitle(string title);
     
-    Task<IEnumerable<Card>> SelectTwoCards();
+    Task<List<Card>> SelectEightCards();
 
     Task<IEnumerable<Card?>> GetTop();
 
     Task<IEnumerable<Card>> GetTop18Plus();
+
+    Task<Card> GetCardById(int cardId);
+
+    Task UpdateCard(Card card);
 }
