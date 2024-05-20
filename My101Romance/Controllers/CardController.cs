@@ -26,6 +26,7 @@ public class CardController(ICardService cardService) : Controller
         return RedirectToAction("Error", "Home");
     }
 
+    [Authorize(Roles = "root, admin")]
     [HttpGet]
     public async Task<IActionResult> GetCard(int id)
     {
@@ -143,7 +144,7 @@ public class CardController(ICardService cardService) : Controller
         }
     }
 
-    [Authorize(Roles = "root, admin")]
+    //[Authorize(Roles = "root, admin")]
     [HttpGet]
     public async Task<IActionResult> AddCard()
     {

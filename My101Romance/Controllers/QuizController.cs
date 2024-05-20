@@ -25,7 +25,7 @@ namespace My101Romance.Controllers
         }
 
 
-        [HttpPost("/Quiz/SelectCard")] // Указываем явно URL для метода SelectCard
+        [HttpPost("/Quiz/SelectCard")] // Specify the URL for the SelectCard method
         public async Task<IActionResult> SelectCard([FromBody] int cardId)
         {
             var card = await _cardService.GetCardById(cardId);
@@ -33,11 +33,11 @@ namespace My101Romance.Controllers
             {
                 card.Rating++;
                 await _cardService.UpdateCard(card);
-                return Ok(new { message = "Success" }); // Возвращаем ответ в формате JSON с сообщением об успешном выборе карточки
+                return Ok(new { message = "Success" }); // Return a JSON response with a success message
             }
             else
             {
-                return NotFound(new { message = "Card not found" }); // Возвращаем ответ в формате JSON с сообщением о том, что карточка не найдена
+                return NotFound(new { message = "Card not found" }); // Return a JSON response with a not found message
             }
         }
     }

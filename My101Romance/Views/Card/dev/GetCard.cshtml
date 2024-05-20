@@ -5,14 +5,23 @@
 }
 <br/>
 
-<div class="flip-card">
-    <div class="flip-card-inner">
-        <div class="flip-card-front">
-            <img src="@Model.ImagePath" alt="Front Image" style="width:300px;height:200px;">
+
+<div class="card mb-3" style="max-width: 540px;">
+    <div class="row no-gutters">
+        <div class="col-md-4">
+            <img src="@Model.ImagePath" class="card-img" alt="card">
         </div>
-        <div class="flip-card-back">
-            <h1>@Model.Title</h1>
-            <p>@Model.Description</p>
+        <div class="col-md-8">
+            <div class="card-body">
+                <h3 class="card-title">@Model.Title</h3>
+                <p class="card-text">@Model.Description</p>
+                @if (User.IsInRole("Admin"))
+                {
+                    <p>ID: @Model.Id</p>
+                    <p>Rating: @Model.Rating</p>
+                }
+            </div>
         </div>
     </div>
 </div>
+

@@ -27,7 +27,7 @@ public class AccountController : Controller
         _logger = logger;
     }
     
-    
+    [HttpGet]
     public IActionResult Login()
     {
         var response = new LoginViewModel();
@@ -84,13 +84,13 @@ public class AccountController : Controller
     {
         if (ModelState.IsValid)
         {
-            // Логируем данные модели
+            // logging
             _logger.LogInformation("Received registration request: {@Model}", model);
 
             var existingUser = await _userManager.FindByEmailAsync(model.Email);
             if (existingUser != null)
             {
-                // Пользователь с такой почтой уже существует, добавляем ошибку в ModelState
+                //user with this email
                 ModelState.AddModelError(nameof(RegisterViewModel.Email), "User with this email already exists.");
                 return View("auth/Register", model);
             }
@@ -104,12 +104,12 @@ public class AccountController : Controller
             
             if (!string.IsNullOrEmpty(model.Password))
             {
-                // Устанавливаем пароль для пользователя
+                // set password
                 user.PasswordHash = _userManager.PasswordHasher.HashPassword(user, model.Password);
             }
             else
             {
-                // Выводим сообщение об ошибке, если пароль не указан
+                // show err if pass empty
                 ModelState.AddModelError(nameof(RegisterViewModel.Password), "Please enter a password.");
                 return View("auth/Register", model);
             }
@@ -125,10 +125,10 @@ public class AccountController : Controller
             {
                 foreach (var error in response.Errors)
                 {
-                    // Выводим ошибки в логи
+                    // log err
                     _logger.LogError("Error: {Description}", error.Description);
 
-                    // Добавляем ошибки в ModelState для отображения на странице
+                    // log
                     ModelState.AddModelError(string.Empty, error.Description);
                 }
             }
@@ -136,10 +136,10 @@ public class AccountController : Controller
         }
         else
         {
-            // Логируем невалидное состояние модели и ошибки валидации
+            // log
             _logger.LogWarning("Invalid model state during registration: {@Model}", model);
         
-            // Добавляем ошибку в ModelState для поля UserName
+            // log err for username
             ModelState.AddModelError(nameof(RegisterViewModel.UserName), "Please enter a valid username.");
         
             foreach (var error in ModelState.Values.SelectMany(v => v.Errors))
@@ -148,7 +148,7 @@ public class AccountController : Controller
             }
         }
 
-        // Возвращаем представление с моделью, содержащей ошибки валидации
+        // return view if all ok
         return View("auth/Register", model);
     }
 

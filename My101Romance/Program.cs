@@ -22,6 +22,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddServices();
 builder.Services.AddRepository();
+builder.Services.AddSession();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
@@ -71,6 +72,8 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
+app.UseSession();
+
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
@@ -82,6 +85,7 @@ app.MapControllerRoute(
     defaults: new { controller = "Quiz", action = "SelectCard" });
 
 // Добавляем маршруты для аутентификации и управления пользователями
+
 app.MapControllerRoute(
     name: "login",
     pattern: "login",

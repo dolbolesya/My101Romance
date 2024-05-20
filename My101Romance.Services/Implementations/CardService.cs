@@ -69,8 +69,7 @@ public class CardService : ICardService
             };
         }
     }
-
-
+    
     public async Task<IBaseResponse<Card>> GetCardByTitle(string title)
     {
         var baseResponse = new BaseResponse<Card>();
@@ -98,27 +97,26 @@ public class CardService : ICardService
         }
     }
 
-    public async Task<IBaseResponse<CardViewModel>> CreateCard(CardViewModel cardViewModel)
+    public async Task<IBaseResponse<CardViewModel>> CreateCard(CreateCardViewModel cardViewModel)
     {
         var baseResponse = new BaseResponse<CardViewModel>();
         try
         {
-            Random r = new Random();
-            var card = new Card()
+            var card = new Card
             {
-                
-                Title = "text",
-                Description = "view desc test",
-                IsForAll = r.Next(2)==0,
-                Rating = r.Next(1,101)
-
+                Title = cardViewModel.Title,
+                Description = cardViewModel.Description,
+                ImagePath = cardViewModel.ImagePath,
+                IsForAll = cardViewModel.IsForAll,
+                Rating = cardViewModel.Rating
             };
 
             await _CardRepository.Create(card);
+            baseResponse.StatusCode = StatusCode.Ok;
         }
         catch (Exception e)
         {
-            return new BaseResponse<CardViewModel>()
+            return new BaseResponse<CardViewModel>
             {
                 ErrDescription = $"[CreateCard]: {e.Message}",
                 StatusCode = StatusCode.InternalServerError
@@ -126,8 +124,8 @@ public class CardService : ICardService
         }
 
         return baseResponse;
-
     }
+
 
     public async Task<IBaseResponse<bool>> DeleteCard(int id)
     {
@@ -251,7 +249,6 @@ public class CardService : ICardService
 
         return baseResponse;
     }
-
     
     public async Task<IBaseResponse<IEnumerable<Card>>> Top18Plus()
     {
@@ -278,7 +275,6 @@ public class CardService : ICardService
 
         return baseResponse;
     }
-
     
     public async Task<List<Card>> GetEightCards()
     {

@@ -9,10 +9,8 @@ public class Card
     [Key]
     public int Id { get; set; }
     
-    
     [Display(Name = "Заголовок")]
     public string? Title { get; set; } 
-    
     
     [Display(Name = "Опис")]
     public string? Description { get; set; }
@@ -23,10 +21,9 @@ public class Card
     
     [Display(Name = "Рейтинг")]
     public int Rating { get; set; } 
-
     
     [Display(Name = "Відображення для усіх користувачів")]
     public bool IsForAll { get; set; }
 
-
 }
+
