@@ -43,6 +43,8 @@ public class CardService : ICardService
         }
     }
 
+
+
     public async Task<IBaseResponse<IEnumerable<Card>>> GetCards()
     {
         var baseResponse = new BaseResponse<IEnumerable<Card>>();
@@ -97,22 +99,22 @@ public class CardService : ICardService
         }
     }
 
-    public async Task<IBaseResponse<CardViewModel>> CreateCard(CreateCardViewModel cardViewModel)
+    public async Task<IBaseResponse<CardViewModel>> CreateCard(CardViewModel cardViewModel)
     {
         var baseResponse = new BaseResponse<CardViewModel>();
         try
         {
-            var card = new Card
+            /*var card = new Card
             {
                 Title = cardViewModel.Title,
                 Description = cardViewModel.Description,
-                ImagePath = cardViewModel.ImagePath,
+                ImagePath = cardViewModel.,
                 IsForAll = cardViewModel.IsForAll,
                 Rating = cardViewModel.Rating
             };
 
             await _CardRepository.Create(card);
-            baseResponse.StatusCode = StatusCode.Ok;
+            baseResponse.StatusCode = StatusCode.Ok;*/
         }
         catch (Exception e)
         {
@@ -301,10 +303,10 @@ public class CardService : ICardService
             var card = new Card()
             {
                 
-                Title = "text",
-                Description = "view desc test",
-                IsForAll = r.Next(2)==0,
-                Rating = r.Next(1,101)
+                Title = "Кінотеатр",
+                Description = "Побачення в кінотеатрі - це спільний перегляд фільму, що створює затишну атмосферу та дає можливість обговорити враження після сеансу.",
+                IsForAll = true,
+                Rating = 0
 
             };
 

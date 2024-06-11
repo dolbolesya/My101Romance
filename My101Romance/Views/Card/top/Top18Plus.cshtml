@@ -2,7 +2,7 @@
 
 
 <div class="container">
-    <h1 class="text-center">Top Cards</h1>
+    <h1 class="text-center">Рейтинг карток</h1>
     <div class="row">
         @foreach (var (card, index) in Model.Select((item, index) => (item, index)))
         {
@@ -16,7 +16,7 @@
                         <div class="card-body">
                             <h3 class="card-title">Card @(index + 1): @card.Title</h3>
                             <p class="card-text">@card.Description</p>
-                            @if (User.IsInRole("Admin"))
+                            @if (User.IsInRole("admin"))
                             {
                             <p>ID: @card.Id</p>
                             <p>Rating: @card.Rating</p>

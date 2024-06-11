@@ -15,4 +15,6 @@ public sealed class AppDbContext : IdentityDbContext<AppUser>
     public DbSet<Card> Card { get; set; }
     
     public DbSet<AppUser?> User { get; set; }
+    
+    public DbSet<Card> UserChooseCard { get; set; }
 }

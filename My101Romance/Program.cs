@@ -18,7 +18,7 @@ using My101Romance.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Добавляем сервисы в контейнер.
+
 builder.Services.AddControllersWithViews();
 builder.Services.AddServices();
 builder.Services.AddRepository();
@@ -78,13 +78,10 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
-// Добавляем маршрут для метода SelectCard в QuizController
 app.MapControllerRoute(
     name: "quiz",
     pattern: "Quiz/SelectCard",
     defaults: new { controller = "Quiz", action = "SelectCard" });
-
-// Добавляем маршруты для аутентификации и управления пользователями
 
 app.MapControllerRoute(
     name: "login",
@@ -95,11 +92,6 @@ app.MapControllerRoute(
     name: "register",
     pattern: "register",
     defaults: new { controller = "Account", action = "Register" });
-
-app.MapControllerRoute(
-    name: "logout",
-    pattern: "Account/Logout",
-    defaults: new { controller = "Account", action = "Logout" });
 
 app.MapControllerRoute(
     name: "quiz",
@@ -113,12 +105,6 @@ app.MapControllerRoute(
     constraints: new { isAuthenticated = new IsNotAuth() });
 
 app.MapControllerRoute(
-    name: "top18plus",
-    pattern: "top",
-    defaults: new { controller = "Card", action = "Top18Plus" },
-    constraints: new { isAuthenticated = new IsAuth() });
-
-app.MapControllerRoute(
     name: "random",
     pattern: "random",
     defaults: new { controller = "Card", action = "ShowRandomCards" });
@@ -127,5 +113,18 @@ app.MapControllerRoute(
     name: "new role",
     pattern: "admin/addrole",
     defaults: new { controller = "Admin", action = "CreateRole" });
+
+
+app.MapControllerRoute(
+    name: "logout",
+    pattern: "Account/Logout",
+    defaults: new { controller = "Account", action = "Logout" });
+
+
+app.MapControllerRoute(
+    name: "top18plus",
+    pattern: "top",
+    defaults: new { controller = "Card", action = "Top18Plus" },
+    constraints: new { isAuthenticated = new IsAuth() });
 
 app.Run();

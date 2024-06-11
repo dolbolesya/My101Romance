@@ -6,7 +6,7 @@ using My101Romance.Domain.ViewModels.Roles;
 
 namespace My101Romance.Controllers;
 
-[Authorize(Roles = "root, admin")]
+//[Authorize(Roles = "root, admin")]
 public class AdminController : Controller
 {
     private readonly RoleManager<IdentityRole> _roleManager;
@@ -215,4 +215,6 @@ public class AdminController : Controller
         }
         return View();
     }
+    
+
 }

@@ -63,7 +63,7 @@ public class CardRepository : ICardRepository
     {
         var cards = _db.Card
             .Where(c => c!.IsForAll == true)
-            .OrderBy(c => c!.Rating)
+            .OrderByDescending(c => c!.Rating)
             .ToList();
 
         return cards;
@@ -74,7 +74,7 @@ public class CardRepository : ICardRepository
     {
         
         var cards = _db.Card
-            .OrderBy(c => c!.Rating)
+            .OrderByDescending(c => c!.Rating)
             .ToList();
 
         return cards;
